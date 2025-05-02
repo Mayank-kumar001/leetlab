@@ -1,0 +1,19 @@
+-- CreateEnum
+CREATE TYPE "userRole" AS ENUM ('USER', 'ADMIN');
+
+-- CreateTable
+CREATE TABLE "user" (
+    "id" TEXT NOT NULL,
+    "name" TEXT,
+    "email" TEXT NOT NULL,
+    "avatar" TEXT NOT NULL,
+    "role" "userRole" NOT NULL DEFAULT 'USER',
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
