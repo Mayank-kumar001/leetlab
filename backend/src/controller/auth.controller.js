@@ -148,8 +148,28 @@ export const loginUser = async (req, res) => {
 
 };
 export const logoutUser = (req, res) => {
-
+    try {
+        res.clearCookie("jwt", {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV!== "development",
+        });
+        res.status(201).json(new apiResponse(201, {}, "User logged out"))
+    } catch (error) {
+        if(error instanceof apiError){
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while the user try to login",
+            success: false,
+        })
+    }
 };
-export const checkUser = (req, res) => {
-
+export const getUser = (req, res) => {
+    res.status(201).json(new apiResponse(201, req.user, "fectched user"))
 };
