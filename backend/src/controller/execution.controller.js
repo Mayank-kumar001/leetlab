@@ -141,7 +141,7 @@ export const executeCode = async (req, res) => {
         }
         return res.status(500).json({
             statusCode: 500,
-            message: "Something went wrong while the user try to create problem",
+            message: "Something went wrong while execution of source code",
             success: false,
         })
     }
