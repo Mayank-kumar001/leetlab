@@ -18,6 +18,11 @@ enum userRole {
   USER
   ADMIN
 }
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
 
 model user {
   id        String   @id @default(uuid())
@@ -28,4 +33,28 @@ model user {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // relation
+  problems problem[]
+}
+
+model problem {
+  id String @id @default(uuid())
+  title String
+  description String
+  difficulty Difficulty
+  tags String[] // array of strings
+  userId String
+  examples Json
+  constraints Json
+  hints Json?
+  editorial String?
+  testCases Json
+  codesnippets Json
+  referenceSolution Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // realation
+  user user @relation(fields: [userId], references: [id])
+
 }

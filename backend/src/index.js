@@ -15,7 +15,9 @@ app.get("/", (req, res) => {
 
 // importing routes
 import authRouter from './router/auth.router.js';
+import problemRouter from './router/problem.router.js';
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/problem", problemRouter);
 
 
 app.listen(port, () => {

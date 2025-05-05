@@ -171,5 +171,5 @@ export const logoutUser = (req, res) => {
     }
 };
 export const getUser = (req, res) => {
-    res.status(201).json(new apiResponse(201, req.user, "fectched user"))
+    return res.status(201).json(new apiResponse(201, req.user, "fectched user"))
 };

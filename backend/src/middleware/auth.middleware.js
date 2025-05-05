@@ -5,7 +5,7 @@ import { db } from "../libs/db.js";
 export const isLoggedIn = async (req, res, next) => {
     try {
         const token = req.cookies.jwt
-        console.log(token);
+        // console.log(token);
         if(!token){
             throw new apiError(401, "Unauthorized user");
         }
@@ -42,4 +42,30 @@ export const isLoggedIn = async (req, res, next) => {
         })
     }
 
+}
+
+export const isAdmin = async (req, res, next) => {
+    try {
+        const user = await db.user.findUnique({
+            where: {id:req.user.id}
+        })
+        if( !user || user.role !== "ADMIN" ){
+            throw new apiError(403, "Access denied - Admins only");
+        }
+        next();
+    } catch (error) {
+        console.log(error);
+        if(error instanceof apiError){
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Admins are only Allowed to access",
+            success: false,
+        })
+    }
 }
