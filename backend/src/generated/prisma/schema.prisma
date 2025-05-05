@@ -25,17 +25,23 @@ enum Difficulty {
   HARD
 }
 
+enum submissionStatus {
+  ACCEPTED
+  WRONG_ANSWER
+}
+
 model user {
-  id        String    @id @default(uuid())
-  name      String?
-  email     String    @unique
-  avatar    String?
-  role      userRole  @default(USER)
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String          @id @default(uuid())
+  name          String?
+  email         String          @unique
+  avatar        String?
+  role          userRole        @default(USER)
+  password      String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   // relation
-  problems  problem[]
+  problems      problem[]
+  problemSolved problemSolved[]
 }
 
 model problem {
@@ -57,4 +63,60 @@ model problem {
 
   // realation
   user user @relation(fields: [userId], references: [id])
+
+  submission submission[]
+  solvedBy   problemSolved[]
+}
+
+model submission {
+  id            String           @id @default(uuid())
+  problemId     String
+  userId        String
+  sourceCode    Json
+  language      String
+  stdin         String?
+  stdout        String?
+  stderr        String?
+  compileOutput String?
+  status        submissionStatus // Accepted , wrong answer
+  memory        String?
+  time          String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  problem  problem    @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  testcase testcase[]
+}
+
+model testcase {
+  id            String           @id @default(uuid())
+  submissionId  String
+  testCase      Int
+  passed        Boolean
+  stdout        String?
+  expected      String
+  stderr        String?
+  compileOutput String?
+  status        submissionStatus
+  memory        String?
+  time          String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  submission submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])
+}
+
+model problemSolved {
+  id        String   @id @default(uuid())
+  userId    String
+  problemId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    user    @relation(fields: [userId], references: [id])
+  problem problem @relation(fields: [problemId], references: [id])
+
+  @@unique([userId, problemId])
 }

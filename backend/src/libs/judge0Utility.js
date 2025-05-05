@@ -36,7 +36,13 @@ export const getSubmissionResultBatch = async (tokens) => {
 
     while (true) {
         try {
-            const result = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch?tokens=${tokenStr}&base64_encoded=false&fields=token,stdout,stderr,status_id,language_id`)
+            const result = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch?tokens=${tokenStr}&base64_encoded=false&fields=token,stdout,stderr,status_id,language_id,time,memory,compile_output,message,status`)
+            // const result = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch`,{
+            //     params:{
+            //         tokens:tokenStr,
+            //         base64_encoded:false,
+            //     }
+            // })
 
 
             const filterobj = result.data.submissions.filter((e) => (e.status_id === 1 || e.status_id === 2));

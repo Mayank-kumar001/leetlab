@@ -94,7 +94,11 @@ export const createProblem = async (req, res) => {
 }
 export const getAllProblems = async (req, res) => {
     try {
-
+        const allProblem = await db.problem.findMany();
+        if(!allProblem){
+            throw new apiError(500, "Problems not found");
+        }
+        res.status(200).json(new apiResponse(200, allProblem, "All problems fetched succesfully"));
     } catch (error) {
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
@@ -105,15 +109,21 @@ export const getAllProblems = async (req, res) => {
         }
         return res.status(500).json({
             statusCode: 500,
-            message: "Something went wrong while the user try to login",
+            message: "Something went wrong while fetching all problems",
             success: false,
         })
     }
 }
 export const getProblemById = async (req, res) => {
     try {
-
+        const problemId = req.params.id;
+        const problem = await db.problem.findUnique({where:{id:problemId}});
+        if(!problem){
+            throw new apiError(404, "Problem not found");
+        }
+        res.status(200).json(new apiResponse(200, problem, `Problem with id ${problemId} fetched succefully`))
     } catch (error) {
+        console.log(error); 
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -123,13 +133,67 @@ export const getProblemById = async (req, res) => {
         }
         return res.status(500).json({
             statusCode: 500,
-            message: "Something went wrong while the user try to login",
+            message: "Something went wrong while fetching problems",
             success: false,
         })
     }
 }
 export const updateProblem = async (req, res) => {
     try {
+        const problemId = req.params.id;
+        if(req.user.role !== "ADMIN"){
+            throw new apiError(403, "Only admins are allowed");
+        }
+
+        const { title, description, difficulty, tags, examples, constraints, hints, editorials, testCases, codesnippets, referenceSolution } = req.body;
+
+        for(const [language, solutionCode] of Object.entries(referenceSolution)){
+            const languageId = getLanguageId(language); 
+            if(!languageId){
+                throw new apiError(400, `${language} language is not supported`);
+            }
+
+            const submissions = testCases.map(({input, output}) => ({
+                language_id: languageId,
+                source_code: solutionCode,
+                stdin: input,
+                expected_output: output,
+            }))
+            const createSubmission = await createSubmissionBatch(submissions);
+
+            const tokens = createSubmission.map(({ token }) => token);
+
+            const getSubmissionResult = await getSubmissionResultBatch(tokens);
+
+            console.log("return waala maal aaga gaya", getSubmissionResult);
+
+            for (let i = 0; i < getSubmissionResult.length; i++) {
+                if (getSubmissionResult[i].status_id !== 3) {
+                    throw new apiError(400, `Test case ${i + 1} failed for ${language} language`);
+                }
+            }
+        }
+        const updateProblem = await db.problem.update({
+            where: { id: problemId },
+            data:{
+                title,
+                description,
+                difficulty,
+                tags,
+                examples,
+                constraints,
+                testCases,
+                hints, 
+                editorials,
+                codesnippets,
+                referenceSolution,
+                userId: req.user.id,
+            }
+        })
+        if(!updateProblem){
+            throw new apiError(500, "Problem not updated");
+        }
+        return res.status(200).json(new apiResponse(200, updateProblem, `Problem with id ${problemId} updated succesfully`))
 
     } catch (error) {
         if (error instanceof apiError) {
@@ -148,7 +212,15 @@ export const updateProblem = async (req, res) => {
 }
 export const deleteProblem = async (req, res) => {
     try {
-
+        const problemId = req.params.id;
+        if(req.user.role !== "ADMIN"){
+            throw new apiError(403, "Only admins are allowed");
+        }
+        const deleteProblem = await db.problem.delete({where:{id:problemId}});
+        if(!deleteProblem){
+            throw new apiError(500, "Problem not deleted");
+        }
+        return res.status(200).json(new apiResponse(200, deleteProblem, `Problem with id ${problemId} deleted succesfully`))
     } catch (error) {
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
