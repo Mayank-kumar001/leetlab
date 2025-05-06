@@ -238,7 +238,25 @@ export const deleteProblem = async (req, res) => {
 }
 export const getSolvedProblems = async (req, res) => {
     try {
-
+        const solvedProblem = await db.problem.findMany(
+            {
+                where:{
+                    solvedBy:{
+                        some:{
+                            userId:req.user.id,
+                        }
+                    }
+                },
+                include:{
+                    solvedBy:{
+                        where:{
+                            userId:req.user.id,
+                        }
+                    }
+                }
+            }
+        );
+        res.status(200).json(new apiResponse(200, solvedProblem, "Solved problems fetched succesfully"));
     } catch (error) {
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({

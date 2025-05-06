@@ -9,7 +9,7 @@ problemRouter.get("/get-all-problems", isLoggedIn, getAllProblems);
 problemRouter.get("/get-problem/:id", isLoggedIn, getProblemById);
 problemRouter.put("/update-problem/:id", isLoggedIn, isAdmin, updateProblem);
 problemRouter.delete("/delete-problem/:id", isLoggedIn, isAdmin, deleteProblem);
-problemRouter.get("/get-Solved-problems/:id", isLoggedIn, getSolvedProblems);
+problemRouter.get("/get-Solved-problems", isLoggedIn, getSolvedProblems);
 
 
 export default problemRouter;
