@@ -37,6 +37,8 @@ model user {
   avatar        String?
   role          userRole        @default(USER)
   password      String
+  refreshToken String?
+  verificationCode String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   // relation

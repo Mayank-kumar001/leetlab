@@ -1,19 +1,68 @@
 import { apiError } from "../libs/apiError.js"
-import jwt from "jsonwebtoken"
+import jwt, { decode } from "jsonwebtoken"
 import { db } from "../libs/db.js";
+
+const generateAccessAndRefreshToken = (user) => {
+    return {
+
+        accessToken: jwt.sign({ id: user.id }, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN }),
+        refreshToken: jwt.sign({ id: user.id }, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN })
+    }
+}
 
 export const isLoggedIn = async (req, res, next) => {
     try {
-        const token = req.cookies.jwt
-        // console.log(token);
-        if(!token){
-            throw new apiError(401, "Unauthorized user");
+        const accessToken = req.cookies.accessToken
+        const refreshToken = req.cookies.refreshToken
+
+        if (!refreshToken) throw new apiError(401, "Unauthorized user");
+
+        let decodedToken;
+
+        try {
+            decodedToken = await jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
+        } catch (error) {
+            const refreshDecodedToken = await jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+            const user = await db.user.findUnique({
+                where: {
+                    id: refreshDecodedToken.id
+                },
+                select: {
+                    refreshToken: true,
+                }
+            })
+            if (!user || user.refreshToken != refreshToken) throw new apiError(403, "Invalid or missing refresh token");
+
+            const token = generateAccessAndRefreshToken(user);
+
+            await db.user.update({
+                where: {
+                    id: refreshDecodedToken.id,
+                },
+                data: {
+                    refreshToken: token.refreshToken,
+                }
+            })
+
+            res.cookie("accessToken", token.accessToken, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV !== "development",
+            });
+
+            res.cookie("refreshToken", token.refreshToken, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV !== "development",
+            });
+
+            decodedToken = { id: refreshDecodedToken.id };
+
         }
-        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
-    
+
         const user = await db.user.findUnique({
-            where:{id: decodedToken.id},
-            select:{
+            where: { id: decodedToken.id },
+            select: {
                 id: true,
                 avatar: true,
                 name: true,
@@ -21,14 +70,14 @@ export const isLoggedIn = async (req, res, next) => {
                 role: true,
             },
         })
-        if(!user){
-            throw new apiError(401, "User not found"); 
+        if (!user) {
+            throw new apiError(401, "User not found");
         }
         req.user = user;
         next();
     } catch (error) {
         console.log(error);
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
@@ -47,15 +96,15 @@ export const isLoggedIn = async (req, res, next) => {
 export const isAdmin = async (req, res, next) => {
     try {
         const user = await db.user.findUnique({
-            where: {id:req.user.id}
+            where: { id: req.user.id }
         })
-        if( !user || user.role !== "ADMIN" ){
+        if (!user || user.role !== "ADMIN") {
             throw new apiError(403, "Access denied - Admins only");
         }
         next();
     } catch (error) {
         console.log(error);
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,

@@ -4,6 +4,18 @@ import { apiResponse } from "../libs/apiResponse.js";
 import { db } from "../libs/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from 'crypto';
+import { sendMail } from "../libs/nodeMailerUtility.js";
+
+
+
+export const generateAccessAndRefreshToken = (user) => {
+    return {
+
+        accessToken: jwt.sign({ id: user.id }, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN }),
+        refreshToken: jwt.sign({ id: user.id }, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN })
+    }
+}
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -15,35 +27,30 @@ export const registerUser = async (req, res) => {
         })
 
         if (existingUser) {
-            throw new apiError(400, "User already exists")  
+            throw new apiError(400, "User already exists")
         }
         const hashedPassword = await bcrypt.hash(password, 10);
+        const verificationCode = crypto.randomBytes(3).toString("hex")
+        await sendMail(email, verificationCode);
 
         const user = await db.user.create({
             data: {
                 name,
                 email,
                 password: hashedPassword,
-                role: userRole.USER
+                role: userRole.USER,
+                verificationCode
             }
         })
         console.log("postgresql user", user);
 
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" })
-
-        res.cookie("jwt", token, {
-            httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV !== "development",
-            maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
-        })
-        res.status(201).json(
+        res.status(200).json(
             new apiResponse(201, {
                 id: user.id,
                 email: user.email,
                 name: user.name,
                 role: user.role,
-            }, "User created")
+            }, "verification code sent on email")
         )
 
     } catch (error) {
@@ -63,76 +70,128 @@ export const registerUser = async (req, res) => {
         })
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
+
+
+export const verifyToken = async (req, res) => {
+    try {
+        const { email, verificationCode } = req.body;
+
+        const user = await db.user.findUnique({
+            where: {
+                email
+            }
+        })
+        if (!user) {
+            throw new apiError(500, "user not found")
+        }
+        const isVerified = (verificationCode === user.verificationCode);
+
+        if (!isVerified) throw new apiError(400, "Verification token is invalid");
+
+        const token = generateAccessAndRefreshToken(user);
+
+        const updatedUser = await db.user.update({
+            where: {
+                email,
+            },
+            data: {
+                refreshToken: token.refreshToken,
+            },
+
+        })
+
+        if (updatedUser) {
+            res.cookie("accessToken", token.accessToken, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV !== "development",
+
+            });
+
+            res.cookie("refreshToken", token.refreshToken, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV !== "development",
+
+            });
+
+            res.status(200).json(new apiResponse(200, {
+                id: updatedUser.id,
+                email: updatedUser.email,
+                name: updatedUser.name,
+                role: updatedUser.role,
+            }, "User verified successfully"))
+        }
+    } catch (error) {
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while verifying the user",
+            success: false,
+        })
+    }
+
+}
+
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        if(!email || !password){
+        if (!email || !password) {
             throw new apiError(400, "Email and password are required");
         }
         const user = await db.user.findUnique({
-            where:{email},
+            where: { email },
         })
-        if(!user){
+        if (!user) {
             throw new apiError(401, "User not found");
         }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    
-        if(!isPasswordCorrect){
+
+        if (!isPasswordCorrect) {
             throw new apiError(401, "Invalid Credentials");
         }
-    
-        const token = await jwt.sign({id:user.id}, process.env.JWT_SECRET, { expiresIn: "7d" })
-    
-        res.cookie("jwt", token, {
-            httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV!== "development",
-            maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+
+        const token = generateAccessAndRefreshToken(user);
+        const updatedUser = await db.user.update({
+            where: {
+                email,
+            },
+            data: {
+                refreshToken: token.refreshToken,
+            },
+
         })
-        res.status(201).json(new apiResponse(201,{
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-        }, "User login succesfull"))
+
+        if (updatedUser) {
+            res.cookie("accessToken", token.accessToken, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV !== "development",
+            });
+
+            res.cookie("refreshToken", token.refreshToken, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV !== "development",
+            });
+
+            res.status(200).json(new apiResponse(200, {
+                id: updatedUser.id,
+                email: updatedUser.email,
+                name: updatedUser.name,
+                role: updatedUser.role,
+            }, "User login succesfull"))
+        }
     } catch (error) {
-        if(error instanceof apiError){
+        console.log(error);
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
@@ -143,20 +202,111 @@ export const loginUser = async (req, res) => {
             statusCode: 500,
             message: "Something went wrong while the user try to login",
             success: false,
-        }) 
+        })
     }
 
 };
+
+export const forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const verificationCode = crypto.randomBytes(3).toString("hex")
+        await sendMail(email, verificationCode);
+    
+        const user = await db.user.update({
+            where: {
+                email,
+            },
+            data: {
+                verificationCode,
+            }
+        })
+    
+        res.status(200).json(new apiResponse(200, {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+        }, " verification code sent on email"))
+    } catch (error) {
+        console.log(error)
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while the user try to login",
+            success: false,
+        })
+    }
+
+}
+export const resetPassword = async (req, res) => {
+    try {
+        const {verificationCode, email,  newPassword, confirmPassword} = req.body;
+        const user = await db.user.findUnique({
+            where:{
+                email,
+            }
+        })
+        if(verificationCode !== user.verificationCode ) throw new apiError(400, "Verification code is invalid or missing");
+        if(newPassword !== confirmPassword) throw new apiError(400, "Passwords does not match");
+    
+        const hashedPassword = await bcrypt.hash(confirmPassword, 10);
+    
+        const updatedUser = await db.user.update({
+            where:{
+                email,
+            },
+            data:{
+                password: hashedPassword,
+            }
+        })
+    
+        res.status(200).json(new apiResponse(200,{
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                }, "Password updated"))
+    } catch (error) {
+        console.log(error)
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while the user try to login",
+            success: false,
+        })
+    }
+    
+    
+}
+
 export const logoutUser = (req, res) => {
     try {
-        res.clearCookie("jwt", {
+        res.clearCookie("accessToken", {
             httpOnly: true,
             sameSite: "strict",
-            secure: process.env.NODE_ENV!== "development",
+            secure: process.env.NODE_ENV !== "development",
+        });
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV !== "development",
         });
         res.status(201).json(new apiResponse(201, {}, "User logged out"))
     } catch (error) {
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
