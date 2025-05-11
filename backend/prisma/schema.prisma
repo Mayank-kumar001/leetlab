@@ -30,21 +30,28 @@ enum submissionStatus {
   WRONG_ANSWER
 }
 
+enum authSource {
+  GOOGLE
+  LOCAL
+}
+
 model user {
-  id            String          @id @default(uuid())
-  name          String?
-  email         String          @unique
-  avatar        String?
-  role          userRole        @default(USER)
-  password      String
-  refreshToken String?
+  id               String          @id @default(uuid())
+  name             String?
+  email            String          @unique
+  avatar           String?
+  role             userRole        @default(USER)
+  password         String?
+  isVerified        Boolean         @default(false)
+  authProvider     authSource      @default(LOCAL)
+  refreshToken     String?
   verificationCode String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
   // relation
-  problems      problem[]
-  problemSolved problemSolved[]
-  playlist playlist[]
+  problems         problem[]
+  problemSolved    problemSolved[]
+  playlist         playlist[]
 }
 
 model problem {
@@ -67,9 +74,9 @@ model problem {
   // realation
   user user @relation(fields: [userId], references: [id])
 
-  submission submission[]
-  solvedBy   problemSolved[]
-  problemsPlaylists  problemInPlaylist[]
+  submission        submission[]
+  solvedBy          problemSolved[]
+  problemsPlaylists problemInPlaylist[]
 }
 
 model submission {
@@ -126,28 +133,27 @@ model problemSolved {
 }
 
 model playlist {
-  id String @id @default(uuid())
-  name String
+  id          String              @id @default(uuid())
+  name        String
   description String?
-  userId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  problems problemInPlaylist[]
-  user user @relation(fields:[userId], references:[id], onDelete:Cascade)
-  @@unique([name , userId])
+  userId      String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  problems    problemInPlaylist[]
+  user        user                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([name, userId])
 }
 
-model problemInPlaylist{
-  id        String   @id @default(uuid())
-  playListId  String
+model problemInPlaylist {
+  id         String   @id @default(uuid())
+  playListId String
   problemId  String
-    createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  playlist  playlist @relation(fields: [playListId] , references: [id] , onDelete: Cascade)
-  problem problem @relation(fields: [problemId] , references: [id] , onDelete: Cascade)
+  playlist playlist @relation(fields: [playListId], references: [id], onDelete: Cascade)
+  problem  problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  @@unique([playListId , problemId])
-
+  @@unique([playListId, problemId])
 }

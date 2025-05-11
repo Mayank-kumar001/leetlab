@@ -1,4 +1,4 @@
-import { userRole } from "../generated/prisma/index.js";
+import { authSource, userRole } from "../generated/prisma/index.js";
 import { apiError } from "../libs/apiError.js";
 import { apiResponse } from "../libs/apiResponse.js";
 import { db } from "../libs/db.js";
@@ -6,16 +6,13 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from 'crypto';
 import { sendMail } from "../libs/nodeMailerUtility.js";
+import axios from "axios"
+import { OAuth2Client } from "google-auth-library"
+import { generateAccessAndRefreshToken } from "../libs/generateTokens.js";
+import { getGoogleAuthUserData } from "../libs/googleAuthUserData.js";
 
 
 
-export const generateAccessAndRefreshToken = (user) => {
-    return {
-
-        accessToken: jwt.sign({ id: user.id }, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN }),
-        refreshToken: jwt.sign({ id: user.id }, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN })
-    }
-}
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -39,7 +36,8 @@ export const registerUser = async (req, res) => {
                 email,
                 password: hashedPassword,
                 role: userRole.USER,
-                verificationCode
+                verificationCode,
+                authProvider: authSource.LOCAL
             }
         })
         console.log("postgresql user", user);
@@ -97,6 +95,7 @@ export const verifyToken = async (req, res) => {
             },
             data: {
                 refreshToken: token.refreshToken,
+                isVerified: true,
             },
 
         })
@@ -165,6 +164,7 @@ export const loginUser = async (req, res) => {
             },
             data: {
                 refreshToken: token.refreshToken,
+                isVerified: true
             },
 
         })
@@ -212,7 +212,7 @@ export const forgetPassword = async (req, res) => {
         const { email } = req.body;
         const verificationCode = crypto.randomBytes(3).toString("hex")
         await sendMail(email, verificationCode);
-    
+
         const user = await db.user.update({
             where: {
                 email,
@@ -221,7 +221,7 @@ export const forgetPassword = async (req, res) => {
                 verificationCode,
             }
         })
-    
+
         res.status(200).json(new apiResponse(200, {
             id: user.id,
             email: user.email,
@@ -247,32 +247,32 @@ export const forgetPassword = async (req, res) => {
 }
 export const resetPassword = async (req, res) => {
     try {
-        const {verificationCode, email,  newPassword, confirmPassword} = req.body;
+        const { verificationCode, email, newPassword, confirmPassword } = req.body;
         const user = await db.user.findUnique({
-            where:{
+            where: {
                 email,
             }
         })
-        if(verificationCode !== user.verificationCode ) throw new apiError(400, "Verification code is invalid or missing");
-        if(newPassword !== confirmPassword) throw new apiError(400, "Passwords does not match");
-    
+        if (verificationCode !== user.verificationCode) throw new apiError(400, "Verification code is invalid or missing");
+        if (newPassword !== confirmPassword) throw new apiError(400, "Passwords does not match");
+
         const hashedPassword = await bcrypt.hash(confirmPassword, 10);
-    
+
         const updatedUser = await db.user.update({
-            where:{
+            where: {
                 email,
             },
-            data:{
+            data: {
                 password: hashedPassword,
             }
         })
-    
-        res.status(200).json(new apiResponse(200,{
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    role: user.role,
-                }, "Password updated"))
+
+        res.status(200).json(new apiResponse(200, {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+        }, "Password updated"))
     } catch (error) {
         console.log(error)
         if (error instanceof apiError) {
@@ -288,8 +288,8 @@ export const resetPassword = async (req, res) => {
             success: false,
         })
     }
-    
-    
+
+
 }
 
 export const logoutUser = (req, res) => {
@@ -323,3 +323,168 @@ export const logoutUser = (req, res) => {
 export const getUser = (req, res) => {
     return res.status(201).json(new apiResponse(201, req.user, "fectched user"))
 };
+
+
+
+
+export const registerByGoogleOAuth = async (req, res) => {
+    try {
+        const { code } = req.body
+        const payload = await getGoogleAuthUserData(code);
+        console.log(payload)
+        console.log(payload.email)
+        const { email, email_verified, name } = payload
+
+        if (!email_verified) throw new apiError(400, "Invalid or missing email address");
+
+        const existingUser = await db.user.findUnique({
+            where: {
+                email: email,
+            },
+        })
+
+        if (existingUser) {
+            throw new apiError(400, "User already exists")
+        }
+
+
+        const user = await db.user.create({
+            data: {
+                name,
+                email,
+                password: null,
+                role: userRole.USER,
+                authProvider: authSource.GOOGLE
+            }
+        })
+        const token = generateAccessAndRefreshToken(user)
+        await db.user.update({
+            where: { email },
+            data: {
+                refreshToken: token.refreshToken,
+                isVerified: true,
+            }
+        })
+        res.cookie("accessToken", token.accessToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV !== "development",
+
+        });
+
+        res.cookie("refreshToken", token.refreshToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV !== "development",
+
+        });
+
+        res.status(201).json(new apiResponse(201, {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+        }, "User created successfully"))
+
+
+
+
+
+
+    } catch (error) {
+        console.log(error)
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while generating tokens",
+            success: false,
+        })
+    }
+}
+
+export const loginByGoogleOAuth = async (req, res) => {
+    try {
+        const { code } = req.body
+        const payload = await getGoogleAuthUserData(code);
+        console.log(payload)
+        console.log(payload.email)
+        const { email, email_verified, name } = payload
+        if (!email_verified) throw new apiError(400, "Invalid or missing email address");
+    
+        const user = await db.user.findUnique({
+            where: { email }
+        })
+    
+        if (!user) throw new apiError(400, "Invalid or missing email address");
+    
+        const token = generateAccessAndRefreshToken(user);
+    
+        await db.user.update({
+            where: { email },
+            data: {
+                refreshToken: token.refreshToken,
+                isVerified: true,
+            }
+        })
+        res.cookie("accessToken", token.accessToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV !== "development",
+    
+        });
+    
+        res.cookie("refreshToken", token.refreshToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV !== "development",
+    
+        });
+    
+        res.status(200).json(new apiResponse(200, {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+        }, "User login successfull"))
+    } catch (error) {
+        console.log(error)
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while the user try to login",
+            success: false,
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
