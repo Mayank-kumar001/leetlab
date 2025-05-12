@@ -10,6 +10,9 @@ import axios from "axios"
 import { OAuth2Client } from "google-auth-library"
 import { generateAccessAndRefreshToken } from "../libs/generateTokens.js";
 import { getGoogleAuthUserData } from "../libs/googleAuthUserData.js";
+import { imagekitUploadFile } from "../libs/imagekit.js";
+import fs, { readFileSync } from "fs"
+import { response } from "express";
 
 
 
@@ -324,9 +327,6 @@ export const getUser = (req, res) => {
     return res.status(201).json(new apiResponse(201, req.user, "fectched user"))
 };
 
-
-
-
 export const registerByGoogleOAuth = async (req, res) => {
     try {
         const { code } = req.body
@@ -416,15 +416,15 @@ export const loginByGoogleOAuth = async (req, res) => {
         console.log(payload.email)
         const { email, email_verified, name } = payload
         if (!email_verified) throw new apiError(400, "Invalid or missing email address");
-    
+
         const user = await db.user.findUnique({
             where: { email }
         })
-    
+
         if (!user) throw new apiError(400, "Invalid or missing email address");
-    
+
         const token = generateAccessAndRefreshToken(user);
-    
+
         await db.user.update({
             where: { email },
             data: {
@@ -436,16 +436,16 @@ export const loginByGoogleOAuth = async (req, res) => {
             httpOnly: true,
             sameSite: "strict",
             secure: process.env.NODE_ENV !== "development",
-    
+
         });
-    
+
         res.cookie("refreshToken", token.refreshToken, {
             httpOnly: true,
             sameSite: "strict",
             secure: process.env.NODE_ENV !== "development",
-    
+
         });
-    
+
         res.status(200).json(new apiResponse(200, {
             id: user.id,
             email: user.email,
@@ -466,6 +466,60 @@ export const loginByGoogleOAuth = async (req, res) => {
             message: "Something went wrong while the user try to login",
             success: false,
         })
+    }
+}
+
+export const uploadImage = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email || !req.file) throw new apiError(400, "Invalid file or email");
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
+        if (!allowedTypes.includes(req.file.mimetype)) {
+            throw new apiError(400, "Unsupported file type. Only images are allowed.");
+        }
+
+        const fileBuffer = readFileSync(req.file.path);
+        const data = await imagekitUploadFile(fileBuffer);
+        if (!data.url) throw new apiError(400, "Image upload failed");
+
+        const user = db.user.update({
+            where: {
+                email
+            },
+            data: {
+                avatar: data.url,
+            }
+        })
+
+        res.status(200).json(new apiResponse(200, user.avatar, "avatar uploaded succesfully"))
+
+    } catch (error) {
+        console.log(error)
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while uploading file",
+            success: false,
+        })
+    } finally {
+        if (req.file?.path) {
+            try {
+                unlinkSync(req.file.path);
+            } catch (err) {
+                return res.status(500).json({
+                    statusCode: 500,
+                    message: "Something went wrong while unlinking the file from server",
+                    success: false,
+                })
+            }
+        }
     }
 }
 
