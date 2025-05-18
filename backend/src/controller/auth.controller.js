@@ -13,6 +13,7 @@ import { getGoogleAuthUserData } from "../libs/googleAuthUserData.js";
 import { imagekitUploadFile } from "../libs/imagekit.js";
 import fs, { readFileSync } from "fs"
 import { response } from "express";
+import { create } from "domain";
 
 
 
@@ -26,21 +27,26 @@ export const registerUser = async (req, res) => {
             },
         })
 
-        if (existingUser) {
+        if (existingUser && existingUser.isVerified) {
             throw new apiError(400, "User already exists")
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = crypto.randomBytes(3).toString("hex")
         await sendMail(email, verificationCode);
 
-        const user = await db.user.create({
-            data: {
+        const user = await db.user.upsert({
+            where:{ email },
+            create: {
                 name,
                 email,
                 password: hashedPassword,
-                role: userRole.USER,
                 verificationCode,
-                authProvider: authSource.LOCAL
+                role: userRole.USER,
+                authProvider: authSource.LOCAL,
+            },
+            update:{
+                verificationCode,
+                password: hashedPassword,
             }
         })
         console.log("postgresql user", user);
@@ -51,6 +57,7 @@ export const registerUser = async (req, res) => {
                 email: user.email,
                 name: user.name,
                 role: user.role,
+                isVerified: user.isVerified,
             }, "verification code sent on email")
         )
 
@@ -99,6 +106,7 @@ export const verifyToken = async (req, res) => {
             data: {
                 refreshToken: token.refreshToken,
                 isVerified: true,
+                verificationCode: null
             },
 
         })
@@ -142,6 +150,38 @@ export const verifyToken = async (req, res) => {
 
 }
 
+export const resendVerficationCode = async (req, res) => {
+    try {
+        const { email } = req.body;
+        console.log(req.body)
+        if(!email) throw new apiError(400,"Invalid or missing email");
+        const verificationCode = crypto.randomBytes(3).toString("hex");
+        await db.user.update({
+            where:{ email },
+            data:{
+                verificationCode: verificationCode,
+            }
+        })
+        await sendMail(email, verificationCode);
+        res.status(200).json(new apiResponse(200, {}, "Verifcation token sent on email"))
+    } catch (error) {
+        console.log(error)
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while sending verifcation code",
+            success: false,
+        })
+    }
+
+}
+
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -153,6 +193,9 @@ export const loginUser = async (req, res) => {
         })
         if (!user) {
             throw new apiError(401, "User not found");
+        }
+        if (!user.isVerified) {
+            throw new apiError(401, "Email is not verified");
         }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
@@ -190,6 +233,7 @@ export const loginUser = async (req, res) => {
                 email: updatedUser.email,
                 name: updatedUser.name,
                 role: updatedUser.role,
+                isVerified: updatedUser.isVerified
             }, "User login succesfull"))
         }
     } catch (error) {
@@ -213,10 +257,19 @@ export const loginUser = async (req, res) => {
 export const forgetPassword = async (req, res) => {
     try {
         const { email } = req.body;
+        if(!email){
+            throw new apiError(400, "invalid or missing email");
+        }
+        let user = await db.user.findUnique({
+            where:{ email }
+        })
+        if(!user){
+            throw new apiError(400, "invalid or missing email");
+        }
         const verificationCode = crypto.randomBytes(3).toString("hex")
         await sendMail(email, verificationCode);
 
-        const user = await db.user.update({
+        user = await db.user.update({
             where: {
                 email,
             },
@@ -242,7 +295,7 @@ export const forgetPassword = async (req, res) => {
         }
         return res.status(500).json({
             statusCode: 500,
-            message: "Something went wrong while the user try to login",
+            message: "Something went wrong while sending verification code",
             success: false,
         })
     }
