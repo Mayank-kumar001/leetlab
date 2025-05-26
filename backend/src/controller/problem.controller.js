@@ -16,8 +16,10 @@ export const createProblem = async (req, res) => {
             if (!languageId) {
                 throw new apiError(400, `${language} language is not supported`);
             }
-
+            console.log("mytestCases", testCases)
             const submissions = testCases.map(({ input, output }) => {
+                console.log(`input: ${input}`)
+                console.log(`input: ${output}`)
                 return {
                     language_id: languageId,
                     source_code: solutionCode,

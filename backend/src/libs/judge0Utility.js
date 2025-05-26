@@ -10,12 +10,14 @@ export const getLanguageId = (language) => {
     return languageMap[language.toUpperCase()];
 }
 export const createSubmissionBatch = async (submissions) => {
+    console.log("submission", submissions)
     try {
         const { data } = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`, { submissions, })
         // console.log(data);
         return data;
     } catch (error) {
         console.log(error);
+        console.log("helllo kids", error);
         throw new apiError(500, "Something went wrong while creating submmissions batch on judge0");
         // console.log(error);
         // return res.status(500).json({

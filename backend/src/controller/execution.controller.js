@@ -98,7 +98,7 @@ export const executeCode = async (req, res) => {
         }
 
         const testcaseResults = detailedResult.map((r) => {
-            const status =  submissionStatus[(r.status).toUpperCase()]
+            const status =  submissionStatus[((r.status).toUpperCase()) !== "ACCEPTED" ? "WRONG_ANSWER" :  "ACCEPTED"]
             console.log("mystatus", (r.status).toUpperCase())
             // const status = r.status
             console.log("status", status);

@@ -34,7 +34,14 @@ export const getSubmissionsForProblem = async (req, res) => {
             where:{
                     userId:req.user.id,
                     problemId:problemId 
+            },
+            include: {
+                testcase: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
             }
+            
         })
         res.status(200).json(new apiResponse(200, submission, "submission fetched successfully"));
     } catch (error) {
@@ -60,6 +67,9 @@ export const getAllTheSubmissionsForProblem = async (req, res) => {
         const submissions = await db.submission.findMany({
             where:{
                     problemId:problemId
+            },
+            include:{
+                testcase : true
             }
         })
         res.status(200).json(new apiResponse(200, submissions, "submission fetched successfully"));

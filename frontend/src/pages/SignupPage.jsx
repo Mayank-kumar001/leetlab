@@ -16,6 +16,10 @@ const signupSchema = z.object({
   password: z.string().min(8, "Password Should be atleast 8 characters")
 })
 
+console.log(import.meta.env.VITE_GOOGLE_REDIRECT_URI);
+console.log(import.meta.env.GOOGLE_REDIRECT_URI);
+console.log("heelow oe")
+
 
 
 
@@ -87,7 +91,7 @@ function SignupPage() {
         
       </form>
     </div>
-
+  
   )
 }
 

@@ -46,10 +46,12 @@ import VerifyPage from './pages/VerifyPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import OAuthCallbackPage from './pages/OAuthCallbackPage'
+import AddProblemPage from './pages/AddProblemPage'
+import CodeExecutionPage from './pages/CodeExecutionPage'
 
 function App() {
-  return (
-    <div className='min-h-screen flex justify-center items-center'>
+  return (<div className='min-h-screen w-[100vw] m-auto flex justify-center items-center bg-neutral-950'>
+    
       <div><Toaster/></div>
       <Routes>
       <Route element={<LandingPage />} path='/'></Route>
@@ -60,6 +62,8 @@ function App() {
       <Route element={<ForgotPasswordPage />} path='/forgot-password'></Route>
       <Route element={<ResetPasswordPage />} path='/reset-password'></Route>
       <Route element={<OAuthCallbackPage />} path='/oauth'></Route>
+      <Route element={<AddProblemPage />} path='/add-problem'></Route>
+      <Route element={<CodeExecutionPage />} path='/code-execute/:problemId'></Route>
     </Routes>
     </div>
   )
