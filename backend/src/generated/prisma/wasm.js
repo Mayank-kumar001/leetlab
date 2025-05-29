@@ -131,6 +131,7 @@ exports.Prisma.UserScalarFieldEnum = {
   authProvider: 'authProvider',
   refreshToken: 'refreshToken',
   verificationCode: 'verificationCode',
+  purchasedPlaylist: 'purchasedPlaylist',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -198,6 +199,9 @@ exports.Prisma.PlaylistScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  coverImage: 'coverImage',
+  isPaid: 'isPaid',
+  basePrice: 'basePrice',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -209,6 +213,20 @@ exports.Prisma.ProblemInPlaylistScalarFieldEnum = {
   problemId: 'problemId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlaylistPurchaseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  playlistId: 'playlistId',
+  playlistName: 'playlistName',
+  razorpayPaymentLinkId: 'razorpayPaymentLinkId',
+  razorpayPaymentLinkStatus: 'razorpayPaymentLinkStatus',
+  razorpayPaymentLinkRefereceId: 'razorpayPaymentLinkRefereceId',
+  razorpayPaymentId: 'razorpayPaymentId',
+  razorpaySignature: 'razorpaySignature',
+  purchasedAt: 'purchasedAt',
+  amount: 'amount'
 };
 
 exports.Prisma.SortOrder = {
@@ -268,7 +286,8 @@ exports.Prisma.ModelName = {
   testcase: 'testcase',
   problemSolved: 'problemSolved',
   playlist: 'playlist',
-  problemInPlaylist: 'problemInPlaylist'
+  problemInPlaylist: 'problemInPlaylist',
+  PlaylistPurchase: 'PlaylistPurchase'
 };
 
 /**

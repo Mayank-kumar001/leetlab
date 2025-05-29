@@ -48,6 +48,11 @@ export type playlist = $Result.DefaultSelection<Prisma.$playlistPayload>
  * 
  */
 export type problemInPlaylist = $Result.DefaultSelection<Prisma.$problemInPlaylistPayload>
+/**
+ * Model PlaylistPurchase
+ * 
+ */
+export type PlaylistPurchase = $Result.DefaultSelection<Prisma.$PlaylistPurchasePayload>
 
 /**
  * Enums
@@ -297,6 +302,16 @@ export class PrismaClient<
     * ```
     */
   get problemInPlaylist(): Prisma.problemInPlaylistDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.playlistPurchase`: Exposes CRUD operations for the **PlaylistPurchase** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlaylistPurchases
+    * const playlistPurchases = await prisma.playlistPurchase.findMany()
+    * ```
+    */
+  get playlistPurchase(): Prisma.PlaylistPurchaseDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -743,7 +758,8 @@ export namespace Prisma {
     testcase: 'testcase',
     problemSolved: 'problemSolved',
     playlist: 'playlist',
-    problemInPlaylist: 'problemInPlaylist'
+    problemInPlaylist: 'problemInPlaylist',
+    PlaylistPurchase: 'PlaylistPurchase'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -762,7 +778,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "problem" | "submission" | "testcase" | "problemSolved" | "playlist" | "problemInPlaylist"
+      modelProps: "user" | "problem" | "submission" | "testcase" | "problemSolved" | "playlist" | "problemInPlaylist" | "playlistPurchase"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1284,6 +1300,80 @@ export namespace Prisma {
           }
         }
       }
+      PlaylistPurchase: {
+        payload: Prisma.$PlaylistPurchasePayload<ExtArgs>
+        fields: Prisma.PlaylistPurchaseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlaylistPurchaseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlaylistPurchaseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>
+          }
+          findFirst: {
+            args: Prisma.PlaylistPurchaseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlaylistPurchaseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>
+          }
+          findMany: {
+            args: Prisma.PlaylistPurchaseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>[]
+          }
+          create: {
+            args: Prisma.PlaylistPurchaseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>
+          }
+          createMany: {
+            args: Prisma.PlaylistPurchaseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlaylistPurchaseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>[]
+          }
+          delete: {
+            args: Prisma.PlaylistPurchaseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>
+          }
+          update: {
+            args: Prisma.PlaylistPurchaseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>
+          }
+          deleteMany: {
+            args: Prisma.PlaylistPurchaseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlaylistPurchaseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlaylistPurchaseUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>[]
+          }
+          upsert: {
+            args: Prisma.PlaylistPurchaseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlaylistPurchasePayload>
+          }
+          aggregate: {
+            args: Prisma.PlaylistPurchaseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlaylistPurchase>
+          }
+          groupBy: {
+            args: Prisma.PlaylistPurchaseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlaylistPurchaseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlaylistPurchaseCountArgs<ExtArgs>
+            result: $Utils.Optional<PlaylistPurchaseCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1375,6 +1465,7 @@ export namespace Prisma {
     problemSolved?: problemSolvedOmit
     playlist?: playlistOmit
     problemInPlaylist?: problemInPlaylistOmit
+    playlistPurchase?: PlaylistPurchaseOmit
   }
 
   /* Types for Logging */
@@ -1472,12 +1563,14 @@ export namespace Prisma {
     problems: number
     problemSolved: number
     playlist: number
+    purchases: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | UserCountOutputTypeCountProblemsArgs
     problemSolved?: boolean | UserCountOutputTypeCountProblemSolvedArgs
     playlist?: boolean | UserCountOutputTypeCountPlaylistArgs
+    purchases?: boolean | UserCountOutputTypeCountPurchasesArgs
   }
 
   // Custom InputTypes
@@ -1510,6 +1603,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPlaylistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: playlistWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlaylistPurchaseWhereInput
   }
 
 
@@ -1599,10 +1699,12 @@ export namespace Prisma {
 
   export type PlaylistCountOutputType = {
     problems: number
+    purchases: number
   }
 
   export type PlaylistCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | PlaylistCountOutputTypeCountProblemsArgs
+    purchases?: boolean | PlaylistCountOutputTypeCountPurchasesArgs
   }
 
   // Custom InputTypes
@@ -1621,6 +1723,13 @@ export namespace Prisma {
    */
   export type PlaylistCountOutputTypeCountProblemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: problemInPlaylistWhereInput
+  }
+
+  /**
+   * PlaylistCountOutputType without action
+   */
+  export type PlaylistCountOutputTypeCountPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlaylistPurchaseWhereInput
   }
 
 
@@ -1679,6 +1788,7 @@ export namespace Prisma {
     authProvider: number
     refreshToken: number
     verificationCode: number
+    purchasedPlaylist: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1726,6 +1836,7 @@ export namespace Prisma {
     authProvider?: true
     refreshToken?: true
     verificationCode?: true
+    purchasedPlaylist?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1814,6 +1925,7 @@ export namespace Prisma {
     authProvider: $Enums.authSource
     refreshToken: string | null
     verificationCode: string | null
+    purchasedPlaylist: string[]
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1846,11 +1958,13 @@ export namespace Prisma {
     authProvider?: boolean
     refreshToken?: boolean
     verificationCode?: boolean
+    purchasedPlaylist?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     problems?: boolean | user$problemsArgs<ExtArgs>
     problemSolved?: boolean | user$problemSolvedArgs<ExtArgs>
     playlist?: boolean | user$playlistArgs<ExtArgs>
+    purchases?: boolean | user$purchasesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1865,6 +1979,7 @@ export namespace Prisma {
     authProvider?: boolean
     refreshToken?: boolean
     verificationCode?: boolean
+    purchasedPlaylist?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1880,6 +1995,7 @@ export namespace Prisma {
     authProvider?: boolean
     refreshToken?: boolean
     verificationCode?: boolean
+    purchasedPlaylist?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1895,15 +2011,17 @@ export namespace Prisma {
     authProvider?: boolean
     refreshToken?: boolean
     verificationCode?: boolean
+    purchasedPlaylist?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "avatar" | "role" | "password" | "isVerified" | "authProvider" | "refreshToken" | "verificationCode" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "avatar" | "role" | "password" | "isVerified" | "authProvider" | "refreshToken" | "verificationCode" | "purchasedPlaylist" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | user$problemsArgs<ExtArgs>
     problemSolved?: boolean | user$problemSolvedArgs<ExtArgs>
     playlist?: boolean | user$playlistArgs<ExtArgs>
+    purchases?: boolean | user$purchasesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type userIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1915,6 +2033,7 @@ export namespace Prisma {
       problems: Prisma.$problemPayload<ExtArgs>[]
       problemSolved: Prisma.$problemSolvedPayload<ExtArgs>[]
       playlist: Prisma.$playlistPayload<ExtArgs>[]
+      purchases: Prisma.$PlaylistPurchasePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1927,6 +2046,7 @@ export namespace Prisma {
       authProvider: $Enums.authSource
       refreshToken: string | null
       verificationCode: string | null
+      purchasedPlaylist: string[]
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2326,6 +2446,7 @@ export namespace Prisma {
     problems<T extends user$problemsArgs<ExtArgs> = {}>(args?: Subset<T, user$problemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$problemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     problemSolved<T extends user$problemSolvedArgs<ExtArgs> = {}>(args?: Subset<T, user$problemSolvedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$problemSolvedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     playlist<T extends user$playlistArgs<ExtArgs> = {}>(args?: Subset<T, user$playlistArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$playlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purchases<T extends user$purchasesArgs<ExtArgs> = {}>(args?: Subset<T, user$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2365,6 +2486,7 @@ export namespace Prisma {
     readonly authProvider: FieldRef<"user", 'authSource'>
     readonly refreshToken: FieldRef<"user", 'String'>
     readonly verificationCode: FieldRef<"user", 'String'>
+    readonly purchasedPlaylist: FieldRef<"user", 'String[]'>
     readonly createdAt: FieldRef<"user", 'DateTime'>
     readonly updatedAt: FieldRef<"user", 'DateTime'>
   }
@@ -2824,6 +2946,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PlaylistScalarFieldEnum | PlaylistScalarFieldEnum[]
+  }
+
+  /**
+   * user.purchases
+   */
+  export type user$purchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    where?: PlaylistPurchaseWhereInput
+    orderBy?: PlaylistPurchaseOrderByWithRelationInput | PlaylistPurchaseOrderByWithRelationInput[]
+    cursor?: PlaylistPurchaseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlaylistPurchaseScalarFieldEnum | PlaylistPurchaseScalarFieldEnum[]
   }
 
   /**
@@ -7560,14 +7706,27 @@ export namespace Prisma {
 
   export type AggregatePlaylist = {
     _count: PlaylistCountAggregateOutputType | null
+    _avg: PlaylistAvgAggregateOutputType | null
+    _sum: PlaylistSumAggregateOutputType | null
     _min: PlaylistMinAggregateOutputType | null
     _max: PlaylistMaxAggregateOutputType | null
+  }
+
+  export type PlaylistAvgAggregateOutputType = {
+    basePrice: number | null
+  }
+
+  export type PlaylistSumAggregateOutputType = {
+    basePrice: number | null
   }
 
   export type PlaylistMinAggregateOutputType = {
     id: string | null
     name: string | null
     description: string | null
+    coverImage: string | null
+    isPaid: boolean | null
+    basePrice: number | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7577,6 +7736,9 @@ export namespace Prisma {
     id: string | null
     name: string | null
     description: string | null
+    coverImage: string | null
+    isPaid: boolean | null
+    basePrice: number | null
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7586,6 +7748,9 @@ export namespace Prisma {
     id: number
     name: number
     description: number
+    coverImage: number
+    isPaid: number
+    basePrice: number
     userId: number
     createdAt: number
     updatedAt: number
@@ -7593,10 +7758,21 @@ export namespace Prisma {
   }
 
 
+  export type PlaylistAvgAggregateInputType = {
+    basePrice?: true
+  }
+
+  export type PlaylistSumAggregateInputType = {
+    basePrice?: true
+  }
+
   export type PlaylistMinAggregateInputType = {
     id?: true
     name?: true
     description?: true
+    coverImage?: true
+    isPaid?: true
+    basePrice?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -7606,6 +7782,9 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    coverImage?: true
+    isPaid?: true
+    basePrice?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -7615,6 +7794,9 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    coverImage?: true
+    isPaid?: true
+    basePrice?: true
     userId?: true
     createdAt?: true
     updatedAt?: true
@@ -7659,6 +7841,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PlaylistAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlaylistSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PlaylistMinAggregateInputType
@@ -7689,6 +7883,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PlaylistCountAggregateInputType | true
+    _avg?: PlaylistAvgAggregateInputType
+    _sum?: PlaylistSumAggregateInputType
     _min?: PlaylistMinAggregateInputType
     _max?: PlaylistMaxAggregateInputType
   }
@@ -7697,10 +7893,15 @@ export namespace Prisma {
     id: string
     name: string
     description: string | null
+    coverImage: string | null
+    isPaid: boolean
+    basePrice: number | null
     userId: string
     createdAt: Date
     updatedAt: Date
     _count: PlaylistCountAggregateOutputType | null
+    _avg: PlaylistAvgAggregateOutputType | null
+    _sum: PlaylistSumAggregateOutputType | null
     _min: PlaylistMinAggregateOutputType | null
     _max: PlaylistMaxAggregateOutputType | null
   }
@@ -7723,11 +7924,15 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    coverImage?: boolean
+    isPaid?: boolean
+    basePrice?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     problems?: boolean | playlist$problemsArgs<ExtArgs>
     user?: boolean | userDefaultArgs<ExtArgs>
+    purchases?: boolean | playlist$purchasesArgs<ExtArgs>
     _count?: boolean | PlaylistCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["playlist"]>
 
@@ -7735,6 +7940,9 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    coverImage?: boolean
+    isPaid?: boolean
+    basePrice?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7745,6 +7953,9 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    coverImage?: boolean
+    isPaid?: boolean
+    basePrice?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7755,15 +7966,19 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    coverImage?: boolean
+    isPaid?: boolean
+    basePrice?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type playlistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["playlist"]>
+  export type playlistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "coverImage" | "isPaid" | "basePrice" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["playlist"]>
   export type playlistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | playlist$problemsArgs<ExtArgs>
     user?: boolean | userDefaultArgs<ExtArgs>
+    purchases?: boolean | playlist$purchasesArgs<ExtArgs>
     _count?: boolean | PlaylistCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type playlistIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7778,11 +7993,15 @@ export namespace Prisma {
     objects: {
       problems: Prisma.$problemInPlaylistPayload<ExtArgs>[]
       user: Prisma.$userPayload<ExtArgs>
+      purchases: Prisma.$PlaylistPurchasePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
       description: string | null
+      coverImage: string | null
+      isPaid: boolean
+      basePrice: number | null
       userId: string
       createdAt: Date
       updatedAt: Date
@@ -8182,6 +8401,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     problems<T extends playlist$problemsArgs<ExtArgs> = {}>(args?: Subset<T, playlist$problemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$problemInPlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends userDefaultArgs<ExtArgs> = {}>(args?: Subset<T, userDefaultArgs<ExtArgs>>): Prisma__userClient<$Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    purchases<T extends playlist$purchasesArgs<ExtArgs> = {}>(args?: Subset<T, playlist$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8214,6 +8434,9 @@ export namespace Prisma {
     readonly id: FieldRef<"playlist", 'String'>
     readonly name: FieldRef<"playlist", 'String'>
     readonly description: FieldRef<"playlist", 'String'>
+    readonly coverImage: FieldRef<"playlist", 'String'>
+    readonly isPaid: FieldRef<"playlist", 'Boolean'>
+    readonly basePrice: FieldRef<"playlist", 'Float'>
     readonly userId: FieldRef<"playlist", 'String'>
     readonly createdAt: FieldRef<"playlist", 'DateTime'>
     readonly updatedAt: FieldRef<"playlist", 'DateTime'>
@@ -8634,6 +8857,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProblemInPlaylistScalarFieldEnum | ProblemInPlaylistScalarFieldEnum[]
+  }
+
+  /**
+   * playlist.purchases
+   */
+  export type playlist$purchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    where?: PlaylistPurchaseWhereInput
+    orderBy?: PlaylistPurchaseOrderByWithRelationInput | PlaylistPurchaseOrderByWithRelationInput[]
+    cursor?: PlaylistPurchaseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlaylistPurchaseScalarFieldEnum | PlaylistPurchaseScalarFieldEnum[]
   }
 
   /**
@@ -9722,6 +9969,1184 @@ export namespace Prisma {
 
 
   /**
+   * Model PlaylistPurchase
+   */
+
+  export type AggregatePlaylistPurchase = {
+    _count: PlaylistPurchaseCountAggregateOutputType | null
+    _avg: PlaylistPurchaseAvgAggregateOutputType | null
+    _sum: PlaylistPurchaseSumAggregateOutputType | null
+    _min: PlaylistPurchaseMinAggregateOutputType | null
+    _max: PlaylistPurchaseMaxAggregateOutputType | null
+  }
+
+  export type PlaylistPurchaseAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PlaylistPurchaseSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PlaylistPurchaseMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    playlistId: string | null
+    playlistName: string | null
+    razorpayPaymentLinkId: string | null
+    razorpayPaymentLinkStatus: string | null
+    razorpayPaymentLinkRefereceId: string | null
+    razorpayPaymentId: string | null
+    razorpaySignature: string | null
+    purchasedAt: Date | null
+    amount: number | null
+  }
+
+  export type PlaylistPurchaseMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    playlistId: string | null
+    playlistName: string | null
+    razorpayPaymentLinkId: string | null
+    razorpayPaymentLinkStatus: string | null
+    razorpayPaymentLinkRefereceId: string | null
+    razorpayPaymentId: string | null
+    razorpaySignature: string | null
+    purchasedAt: Date | null
+    amount: number | null
+  }
+
+  export type PlaylistPurchaseCountAggregateOutputType = {
+    id: number
+    userId: number
+    playlistId: number
+    playlistName: number
+    razorpayPaymentLinkId: number
+    razorpayPaymentLinkStatus: number
+    razorpayPaymentLinkRefereceId: number
+    razorpayPaymentId: number
+    razorpaySignature: number
+    purchasedAt: number
+    amount: number
+    _all: number
+  }
+
+
+  export type PlaylistPurchaseAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type PlaylistPurchaseSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type PlaylistPurchaseMinAggregateInputType = {
+    id?: true
+    userId?: true
+    playlistId?: true
+    playlistName?: true
+    razorpayPaymentLinkId?: true
+    razorpayPaymentLinkStatus?: true
+    razorpayPaymentLinkRefereceId?: true
+    razorpayPaymentId?: true
+    razorpaySignature?: true
+    purchasedAt?: true
+    amount?: true
+  }
+
+  export type PlaylistPurchaseMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    playlistId?: true
+    playlistName?: true
+    razorpayPaymentLinkId?: true
+    razorpayPaymentLinkStatus?: true
+    razorpayPaymentLinkRefereceId?: true
+    razorpayPaymentId?: true
+    razorpaySignature?: true
+    purchasedAt?: true
+    amount?: true
+  }
+
+  export type PlaylistPurchaseCountAggregateInputType = {
+    id?: true
+    userId?: true
+    playlistId?: true
+    playlistName?: true
+    razorpayPaymentLinkId?: true
+    razorpayPaymentLinkStatus?: true
+    razorpayPaymentLinkRefereceId?: true
+    razorpayPaymentId?: true
+    razorpaySignature?: true
+    purchasedAt?: true
+    amount?: true
+    _all?: true
+  }
+
+  export type PlaylistPurchaseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlaylistPurchase to aggregate.
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlaylistPurchases to fetch.
+     */
+    orderBy?: PlaylistPurchaseOrderByWithRelationInput | PlaylistPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlaylistPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlaylistPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlaylistPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlaylistPurchases
+    **/
+    _count?: true | PlaylistPurchaseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlaylistPurchaseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlaylistPurchaseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlaylistPurchaseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlaylistPurchaseMaxAggregateInputType
+  }
+
+  export type GetPlaylistPurchaseAggregateType<T extends PlaylistPurchaseAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlaylistPurchase]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlaylistPurchase[P]>
+      : GetScalarType<T[P], AggregatePlaylistPurchase[P]>
+  }
+
+
+
+
+  export type PlaylistPurchaseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlaylistPurchaseWhereInput
+    orderBy?: PlaylistPurchaseOrderByWithAggregationInput | PlaylistPurchaseOrderByWithAggregationInput[]
+    by: PlaylistPurchaseScalarFieldEnum[] | PlaylistPurchaseScalarFieldEnum
+    having?: PlaylistPurchaseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlaylistPurchaseCountAggregateInputType | true
+    _avg?: PlaylistPurchaseAvgAggregateInputType
+    _sum?: PlaylistPurchaseSumAggregateInputType
+    _min?: PlaylistPurchaseMinAggregateInputType
+    _max?: PlaylistPurchaseMaxAggregateInputType
+  }
+
+  export type PlaylistPurchaseGroupByOutputType = {
+    id: string
+    userId: string
+    playlistId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId: string | null
+    razorpaySignature: string | null
+    purchasedAt: Date
+    amount: number
+    _count: PlaylistPurchaseCountAggregateOutputType | null
+    _avg: PlaylistPurchaseAvgAggregateOutputType | null
+    _sum: PlaylistPurchaseSumAggregateOutputType | null
+    _min: PlaylistPurchaseMinAggregateOutputType | null
+    _max: PlaylistPurchaseMaxAggregateOutputType | null
+  }
+
+  type GetPlaylistPurchaseGroupByPayload<T extends PlaylistPurchaseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlaylistPurchaseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlaylistPurchaseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlaylistPurchaseGroupByOutputType[P]>
+            : GetScalarType<T[P], PlaylistPurchaseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlaylistPurchaseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    playlistId?: boolean
+    playlistName?: boolean
+    razorpayPaymentLinkId?: boolean
+    razorpayPaymentLinkStatus?: boolean
+    razorpayPaymentLinkRefereceId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    purchasedAt?: boolean
+    amount?: boolean
+    user?: boolean | userDefaultArgs<ExtArgs>
+    playlist?: boolean | playlistDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["playlistPurchase"]>
+
+  export type PlaylistPurchaseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    playlistId?: boolean
+    playlistName?: boolean
+    razorpayPaymentLinkId?: boolean
+    razorpayPaymentLinkStatus?: boolean
+    razorpayPaymentLinkRefereceId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    purchasedAt?: boolean
+    amount?: boolean
+    user?: boolean | userDefaultArgs<ExtArgs>
+    playlist?: boolean | playlistDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["playlistPurchase"]>
+
+  export type PlaylistPurchaseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    playlistId?: boolean
+    playlistName?: boolean
+    razorpayPaymentLinkId?: boolean
+    razorpayPaymentLinkStatus?: boolean
+    razorpayPaymentLinkRefereceId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    purchasedAt?: boolean
+    amount?: boolean
+    user?: boolean | userDefaultArgs<ExtArgs>
+    playlist?: boolean | playlistDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["playlistPurchase"]>
+
+  export type PlaylistPurchaseSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    playlistId?: boolean
+    playlistName?: boolean
+    razorpayPaymentLinkId?: boolean
+    razorpayPaymentLinkStatus?: boolean
+    razorpayPaymentLinkRefereceId?: boolean
+    razorpayPaymentId?: boolean
+    razorpaySignature?: boolean
+    purchasedAt?: boolean
+    amount?: boolean
+  }
+
+  export type PlaylistPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "playlistId" | "playlistName" | "razorpayPaymentLinkId" | "razorpayPaymentLinkStatus" | "razorpayPaymentLinkRefereceId" | "razorpayPaymentId" | "razorpaySignature" | "purchasedAt" | "amount", ExtArgs["result"]["playlistPurchase"]>
+  export type PlaylistPurchaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | userDefaultArgs<ExtArgs>
+    playlist?: boolean | playlistDefaultArgs<ExtArgs>
+  }
+  export type PlaylistPurchaseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | userDefaultArgs<ExtArgs>
+    playlist?: boolean | playlistDefaultArgs<ExtArgs>
+  }
+  export type PlaylistPurchaseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | userDefaultArgs<ExtArgs>
+    playlist?: boolean | playlistDefaultArgs<ExtArgs>
+  }
+
+  export type $PlaylistPurchasePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlaylistPurchase"
+    objects: {
+      user: Prisma.$userPayload<ExtArgs>
+      playlist: Prisma.$playlistPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      playlistId: string
+      playlistName: string
+      razorpayPaymentLinkId: string
+      razorpayPaymentLinkStatus: string
+      razorpayPaymentLinkRefereceId: string
+      razorpayPaymentId: string | null
+      razorpaySignature: string | null
+      purchasedAt: Date
+      amount: number
+    }, ExtArgs["result"]["playlistPurchase"]>
+    composites: {}
+  }
+
+  type PlaylistPurchaseGetPayload<S extends boolean | null | undefined | PlaylistPurchaseDefaultArgs> = $Result.GetResult<Prisma.$PlaylistPurchasePayload, S>
+
+  type PlaylistPurchaseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlaylistPurchaseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlaylistPurchaseCountAggregateInputType | true
+    }
+
+  export interface PlaylistPurchaseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlaylistPurchase'], meta: { name: 'PlaylistPurchase' } }
+    /**
+     * Find zero or one PlaylistPurchase that matches the filter.
+     * @param {PlaylistPurchaseFindUniqueArgs} args - Arguments to find a PlaylistPurchase
+     * @example
+     * // Get one PlaylistPurchase
+     * const playlistPurchase = await prisma.playlistPurchase.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlaylistPurchaseFindUniqueArgs>(args: SelectSubset<T, PlaylistPurchaseFindUniqueArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PlaylistPurchase that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlaylistPurchaseFindUniqueOrThrowArgs} args - Arguments to find a PlaylistPurchase
+     * @example
+     * // Get one PlaylistPurchase
+     * const playlistPurchase = await prisma.playlistPurchase.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlaylistPurchaseFindUniqueOrThrowArgs>(args: SelectSubset<T, PlaylistPurchaseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlaylistPurchase that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseFindFirstArgs} args - Arguments to find a PlaylistPurchase
+     * @example
+     * // Get one PlaylistPurchase
+     * const playlistPurchase = await prisma.playlistPurchase.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlaylistPurchaseFindFirstArgs>(args?: SelectSubset<T, PlaylistPurchaseFindFirstArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlaylistPurchase that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseFindFirstOrThrowArgs} args - Arguments to find a PlaylistPurchase
+     * @example
+     * // Get one PlaylistPurchase
+     * const playlistPurchase = await prisma.playlistPurchase.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlaylistPurchaseFindFirstOrThrowArgs>(args?: SelectSubset<T, PlaylistPurchaseFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlaylistPurchases that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlaylistPurchases
+     * const playlistPurchases = await prisma.playlistPurchase.findMany()
+     * 
+     * // Get first 10 PlaylistPurchases
+     * const playlistPurchases = await prisma.playlistPurchase.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const playlistPurchaseWithIdOnly = await prisma.playlistPurchase.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlaylistPurchaseFindManyArgs>(args?: SelectSubset<T, PlaylistPurchaseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PlaylistPurchase.
+     * @param {PlaylistPurchaseCreateArgs} args - Arguments to create a PlaylistPurchase.
+     * @example
+     * // Create one PlaylistPurchase
+     * const PlaylistPurchase = await prisma.playlistPurchase.create({
+     *   data: {
+     *     // ... data to create a PlaylistPurchase
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlaylistPurchaseCreateArgs>(args: SelectSubset<T, PlaylistPurchaseCreateArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PlaylistPurchases.
+     * @param {PlaylistPurchaseCreateManyArgs} args - Arguments to create many PlaylistPurchases.
+     * @example
+     * // Create many PlaylistPurchases
+     * const playlistPurchase = await prisma.playlistPurchase.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlaylistPurchaseCreateManyArgs>(args?: SelectSubset<T, PlaylistPurchaseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PlaylistPurchases and returns the data saved in the database.
+     * @param {PlaylistPurchaseCreateManyAndReturnArgs} args - Arguments to create many PlaylistPurchases.
+     * @example
+     * // Create many PlaylistPurchases
+     * const playlistPurchase = await prisma.playlistPurchase.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PlaylistPurchases and only return the `id`
+     * const playlistPurchaseWithIdOnly = await prisma.playlistPurchase.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlaylistPurchaseCreateManyAndReturnArgs>(args?: SelectSubset<T, PlaylistPurchaseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PlaylistPurchase.
+     * @param {PlaylistPurchaseDeleteArgs} args - Arguments to delete one PlaylistPurchase.
+     * @example
+     * // Delete one PlaylistPurchase
+     * const PlaylistPurchase = await prisma.playlistPurchase.delete({
+     *   where: {
+     *     // ... filter to delete one PlaylistPurchase
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlaylistPurchaseDeleteArgs>(args: SelectSubset<T, PlaylistPurchaseDeleteArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PlaylistPurchase.
+     * @param {PlaylistPurchaseUpdateArgs} args - Arguments to update one PlaylistPurchase.
+     * @example
+     * // Update one PlaylistPurchase
+     * const playlistPurchase = await prisma.playlistPurchase.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlaylistPurchaseUpdateArgs>(args: SelectSubset<T, PlaylistPurchaseUpdateArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PlaylistPurchases.
+     * @param {PlaylistPurchaseDeleteManyArgs} args - Arguments to filter PlaylistPurchases to delete.
+     * @example
+     * // Delete a few PlaylistPurchases
+     * const { count } = await prisma.playlistPurchase.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlaylistPurchaseDeleteManyArgs>(args?: SelectSubset<T, PlaylistPurchaseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlaylistPurchases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlaylistPurchases
+     * const playlistPurchase = await prisma.playlistPurchase.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlaylistPurchaseUpdateManyArgs>(args: SelectSubset<T, PlaylistPurchaseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlaylistPurchases and returns the data updated in the database.
+     * @param {PlaylistPurchaseUpdateManyAndReturnArgs} args - Arguments to update many PlaylistPurchases.
+     * @example
+     * // Update many PlaylistPurchases
+     * const playlistPurchase = await prisma.playlistPurchase.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PlaylistPurchases and only return the `id`
+     * const playlistPurchaseWithIdOnly = await prisma.playlistPurchase.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlaylistPurchaseUpdateManyAndReturnArgs>(args: SelectSubset<T, PlaylistPurchaseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PlaylistPurchase.
+     * @param {PlaylistPurchaseUpsertArgs} args - Arguments to update or create a PlaylistPurchase.
+     * @example
+     * // Update or create a PlaylistPurchase
+     * const playlistPurchase = await prisma.playlistPurchase.upsert({
+     *   create: {
+     *     // ... data to create a PlaylistPurchase
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlaylistPurchase we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlaylistPurchaseUpsertArgs>(args: SelectSubset<T, PlaylistPurchaseUpsertArgs<ExtArgs>>): Prisma__PlaylistPurchaseClient<$Result.GetResult<Prisma.$PlaylistPurchasePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PlaylistPurchases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseCountArgs} args - Arguments to filter PlaylistPurchases to count.
+     * @example
+     * // Count the number of PlaylistPurchases
+     * const count = await prisma.playlistPurchase.count({
+     *   where: {
+     *     // ... the filter for the PlaylistPurchases we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlaylistPurchaseCountArgs>(
+      args?: Subset<T, PlaylistPurchaseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlaylistPurchaseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlaylistPurchase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlaylistPurchaseAggregateArgs>(args: Subset<T, PlaylistPurchaseAggregateArgs>): Prisma.PrismaPromise<GetPlaylistPurchaseAggregateType<T>>
+
+    /**
+     * Group by PlaylistPurchase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlaylistPurchaseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlaylistPurchaseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlaylistPurchaseGroupByArgs['orderBy'] }
+        : { orderBy?: PlaylistPurchaseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlaylistPurchaseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlaylistPurchaseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlaylistPurchase model
+   */
+  readonly fields: PlaylistPurchaseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlaylistPurchase.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlaylistPurchaseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends userDefaultArgs<ExtArgs> = {}>(args?: Subset<T, userDefaultArgs<ExtArgs>>): Prisma__userClient<$Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    playlist<T extends playlistDefaultArgs<ExtArgs> = {}>(args?: Subset<T, playlistDefaultArgs<ExtArgs>>): Prisma__playlistClient<$Result.GetResult<Prisma.$playlistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlaylistPurchase model
+   */
+  interface PlaylistPurchaseFieldRefs {
+    readonly id: FieldRef<"PlaylistPurchase", 'String'>
+    readonly userId: FieldRef<"PlaylistPurchase", 'String'>
+    readonly playlistId: FieldRef<"PlaylistPurchase", 'String'>
+    readonly playlistName: FieldRef<"PlaylistPurchase", 'String'>
+    readonly razorpayPaymentLinkId: FieldRef<"PlaylistPurchase", 'String'>
+    readonly razorpayPaymentLinkStatus: FieldRef<"PlaylistPurchase", 'String'>
+    readonly razorpayPaymentLinkRefereceId: FieldRef<"PlaylistPurchase", 'String'>
+    readonly razorpayPaymentId: FieldRef<"PlaylistPurchase", 'String'>
+    readonly razorpaySignature: FieldRef<"PlaylistPurchase", 'String'>
+    readonly purchasedAt: FieldRef<"PlaylistPurchase", 'DateTime'>
+    readonly amount: FieldRef<"PlaylistPurchase", 'Float'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlaylistPurchase findUnique
+   */
+  export type PlaylistPurchaseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which PlaylistPurchase to fetch.
+     */
+    where: PlaylistPurchaseWhereUniqueInput
+  }
+
+  /**
+   * PlaylistPurchase findUniqueOrThrow
+   */
+  export type PlaylistPurchaseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which PlaylistPurchase to fetch.
+     */
+    where: PlaylistPurchaseWhereUniqueInput
+  }
+
+  /**
+   * PlaylistPurchase findFirst
+   */
+  export type PlaylistPurchaseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which PlaylistPurchase to fetch.
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlaylistPurchases to fetch.
+     */
+    orderBy?: PlaylistPurchaseOrderByWithRelationInput | PlaylistPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlaylistPurchases.
+     */
+    cursor?: PlaylistPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlaylistPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlaylistPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlaylistPurchases.
+     */
+    distinct?: PlaylistPurchaseScalarFieldEnum | PlaylistPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * PlaylistPurchase findFirstOrThrow
+   */
+  export type PlaylistPurchaseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which PlaylistPurchase to fetch.
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlaylistPurchases to fetch.
+     */
+    orderBy?: PlaylistPurchaseOrderByWithRelationInput | PlaylistPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlaylistPurchases.
+     */
+    cursor?: PlaylistPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlaylistPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlaylistPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlaylistPurchases.
+     */
+    distinct?: PlaylistPurchaseScalarFieldEnum | PlaylistPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * PlaylistPurchase findMany
+   */
+  export type PlaylistPurchaseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which PlaylistPurchases to fetch.
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlaylistPurchases to fetch.
+     */
+    orderBy?: PlaylistPurchaseOrderByWithRelationInput | PlaylistPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlaylistPurchases.
+     */
+    cursor?: PlaylistPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlaylistPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlaylistPurchases.
+     */
+    skip?: number
+    distinct?: PlaylistPurchaseScalarFieldEnum | PlaylistPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * PlaylistPurchase create
+   */
+  export type PlaylistPurchaseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PlaylistPurchase.
+     */
+    data: XOR<PlaylistPurchaseCreateInput, PlaylistPurchaseUncheckedCreateInput>
+  }
+
+  /**
+   * PlaylistPurchase createMany
+   */
+  export type PlaylistPurchaseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlaylistPurchases.
+     */
+    data: PlaylistPurchaseCreateManyInput | PlaylistPurchaseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlaylistPurchase createManyAndReturn
+   */
+  export type PlaylistPurchaseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * The data used to create many PlaylistPurchases.
+     */
+    data: PlaylistPurchaseCreateManyInput | PlaylistPurchaseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PlaylistPurchase update
+   */
+  export type PlaylistPurchaseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PlaylistPurchase.
+     */
+    data: XOR<PlaylistPurchaseUpdateInput, PlaylistPurchaseUncheckedUpdateInput>
+    /**
+     * Choose, which PlaylistPurchase to update.
+     */
+    where: PlaylistPurchaseWhereUniqueInput
+  }
+
+  /**
+   * PlaylistPurchase updateMany
+   */
+  export type PlaylistPurchaseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlaylistPurchases.
+     */
+    data: XOR<PlaylistPurchaseUpdateManyMutationInput, PlaylistPurchaseUncheckedUpdateManyInput>
+    /**
+     * Filter which PlaylistPurchases to update
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * Limit how many PlaylistPurchases to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlaylistPurchase updateManyAndReturn
+   */
+  export type PlaylistPurchaseUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * The data used to update PlaylistPurchases.
+     */
+    data: XOR<PlaylistPurchaseUpdateManyMutationInput, PlaylistPurchaseUncheckedUpdateManyInput>
+    /**
+     * Filter which PlaylistPurchases to update
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * Limit how many PlaylistPurchases to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PlaylistPurchase upsert
+   */
+  export type PlaylistPurchaseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PlaylistPurchase to update in case it exists.
+     */
+    where: PlaylistPurchaseWhereUniqueInput
+    /**
+     * In case the PlaylistPurchase found by the `where` argument doesn't exist, create a new PlaylistPurchase with this data.
+     */
+    create: XOR<PlaylistPurchaseCreateInput, PlaylistPurchaseUncheckedCreateInput>
+    /**
+     * In case the PlaylistPurchase was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlaylistPurchaseUpdateInput, PlaylistPurchaseUncheckedUpdateInput>
+  }
+
+  /**
+   * PlaylistPurchase delete
+   */
+  export type PlaylistPurchaseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter which PlaylistPurchase to delete.
+     */
+    where: PlaylistPurchaseWhereUniqueInput
+  }
+
+  /**
+   * PlaylistPurchase deleteMany
+   */
+  export type PlaylistPurchaseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlaylistPurchases to delete
+     */
+    where?: PlaylistPurchaseWhereInput
+    /**
+     * Limit how many PlaylistPurchases to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlaylistPurchase without action
+   */
+  export type PlaylistPurchaseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlaylistPurchase
+     */
+    select?: PlaylistPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlaylistPurchase
+     */
+    omit?: PlaylistPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlaylistPurchaseInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9746,6 +11171,7 @@ export namespace Prisma {
     authProvider: 'authProvider',
     refreshToken: 'refreshToken',
     verificationCode: 'verificationCode',
+    purchasedPlaylist: 'purchasedPlaylist',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -9828,6 +11254,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
+    coverImage: 'coverImage',
+    isPaid: 'isPaid',
+    basePrice: 'basePrice',
     userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -9845,6 +11274,23 @@ export namespace Prisma {
   };
 
   export type ProblemInPlaylistScalarFieldEnum = (typeof ProblemInPlaylistScalarFieldEnum)[keyof typeof ProblemInPlaylistScalarFieldEnum]
+
+
+  export const PlaylistPurchaseScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    playlistId: 'playlistId',
+    playlistName: 'playlistName',
+    razorpayPaymentLinkId: 'razorpayPaymentLinkId',
+    razorpayPaymentLinkStatus: 'razorpayPaymentLinkStatus',
+    razorpayPaymentLinkRefereceId: 'razorpayPaymentLinkRefereceId',
+    razorpayPaymentId: 'razorpayPaymentId',
+    razorpaySignature: 'razorpaySignature',
+    purchasedAt: 'purchasedAt',
+    amount: 'amount'
+  };
+
+  export type PlaylistPurchaseScalarFieldEnum = (typeof PlaylistPurchaseScalarFieldEnum)[keyof typeof PlaylistPurchaseScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10050,11 +11496,13 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFilter<"user"> | $Enums.authSource
     refreshToken?: StringNullableFilter<"user"> | string | null
     verificationCode?: StringNullableFilter<"user"> | string | null
+    purchasedPlaylist?: StringNullableListFilter<"user">
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     problems?: ProblemListRelationFilter
     problemSolved?: ProblemSolvedListRelationFilter
     playlist?: PlaylistListRelationFilter
+    purchases?: PlaylistPurchaseListRelationFilter
   }
 
   export type userOrderByWithRelationInput = {
@@ -10068,11 +11516,13 @@ export namespace Prisma {
     authProvider?: SortOrder
     refreshToken?: SortOrderInput | SortOrder
     verificationCode?: SortOrderInput | SortOrder
+    purchasedPlaylist?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     problems?: problemOrderByRelationAggregateInput
     problemSolved?: problemSolvedOrderByRelationAggregateInput
     playlist?: playlistOrderByRelationAggregateInput
+    purchases?: PlaylistPurchaseOrderByRelationAggregateInput
   }
 
   export type userWhereUniqueInput = Prisma.AtLeast<{
@@ -10089,11 +11539,13 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFilter<"user"> | $Enums.authSource
     refreshToken?: StringNullableFilter<"user"> | string | null
     verificationCode?: StringNullableFilter<"user"> | string | null
+    purchasedPlaylist?: StringNullableListFilter<"user">
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     problems?: ProblemListRelationFilter
     problemSolved?: ProblemSolvedListRelationFilter
     playlist?: PlaylistListRelationFilter
+    purchases?: PlaylistPurchaseListRelationFilter
   }, "id" | "email">
 
   export type userOrderByWithAggregationInput = {
@@ -10107,6 +11559,7 @@ export namespace Prisma {
     authProvider?: SortOrder
     refreshToken?: SortOrderInput | SortOrder
     verificationCode?: SortOrderInput | SortOrder
+    purchasedPlaylist?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: userCountOrderByAggregateInput
@@ -10128,6 +11581,7 @@ export namespace Prisma {
     authProvider?: EnumauthSourceWithAggregatesFilter<"user"> | $Enums.authSource
     refreshToken?: StringNullableWithAggregatesFilter<"user"> | string | null
     verificationCode?: StringNullableWithAggregatesFilter<"user"> | string | null
+    purchasedPlaylist?: StringNullableListFilter<"user">
     createdAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
   }
@@ -10512,22 +11966,30 @@ export namespace Prisma {
     id?: StringFilter<"playlist"> | string
     name?: StringFilter<"playlist"> | string
     description?: StringNullableFilter<"playlist"> | string | null
+    coverImage?: StringNullableFilter<"playlist"> | string | null
+    isPaid?: BoolFilter<"playlist"> | boolean
+    basePrice?: FloatNullableFilter<"playlist"> | number | null
     userId?: StringFilter<"playlist"> | string
     createdAt?: DateTimeFilter<"playlist"> | Date | string
     updatedAt?: DateTimeFilter<"playlist"> | Date | string
     problems?: ProblemInPlaylistListRelationFilter
     user?: XOR<UserScalarRelationFilter, userWhereInput>
+    purchases?: PlaylistPurchaseListRelationFilter
   }
 
   export type playlistOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    coverImage?: SortOrderInput | SortOrder
+    isPaid?: SortOrder
+    basePrice?: SortOrderInput | SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     problems?: problemInPlaylistOrderByRelationAggregateInput
     user?: userOrderByWithRelationInput
+    purchases?: PlaylistPurchaseOrderByRelationAggregateInput
   }
 
   export type playlistWhereUniqueInput = Prisma.AtLeast<{
@@ -10538,23 +12000,32 @@ export namespace Prisma {
     NOT?: playlistWhereInput | playlistWhereInput[]
     name?: StringFilter<"playlist"> | string
     description?: StringNullableFilter<"playlist"> | string | null
+    coverImage?: StringNullableFilter<"playlist"> | string | null
+    isPaid?: BoolFilter<"playlist"> | boolean
+    basePrice?: FloatNullableFilter<"playlist"> | number | null
     userId?: StringFilter<"playlist"> | string
     createdAt?: DateTimeFilter<"playlist"> | Date | string
     updatedAt?: DateTimeFilter<"playlist"> | Date | string
     problems?: ProblemInPlaylistListRelationFilter
     user?: XOR<UserScalarRelationFilter, userWhereInput>
+    purchases?: PlaylistPurchaseListRelationFilter
   }, "id" | "name_userId">
 
   export type playlistOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    coverImage?: SortOrderInput | SortOrder
+    isPaid?: SortOrder
+    basePrice?: SortOrderInput | SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: playlistCountOrderByAggregateInput
+    _avg?: playlistAvgOrderByAggregateInput
     _max?: playlistMaxOrderByAggregateInput
     _min?: playlistMinOrderByAggregateInput
+    _sum?: playlistSumOrderByAggregateInput
   }
 
   export type playlistScalarWhereWithAggregatesInput = {
@@ -10564,6 +12035,9 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"playlist"> | string
     name?: StringWithAggregatesFilter<"playlist"> | string
     description?: StringNullableWithAggregatesFilter<"playlist"> | string | null
+    coverImage?: StringNullableWithAggregatesFilter<"playlist"> | string | null
+    isPaid?: BoolWithAggregatesFilter<"playlist"> | boolean
+    basePrice?: FloatNullableWithAggregatesFilter<"playlist"> | number | null
     userId?: StringWithAggregatesFilter<"playlist"> | string
     createdAt?: DateTimeWithAggregatesFilter<"playlist"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"playlist"> | Date | string
@@ -10628,6 +12102,97 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"problemInPlaylist"> | Date | string
   }
 
+  export type PlaylistPurchaseWhereInput = {
+    AND?: PlaylistPurchaseWhereInput | PlaylistPurchaseWhereInput[]
+    OR?: PlaylistPurchaseWhereInput[]
+    NOT?: PlaylistPurchaseWhereInput | PlaylistPurchaseWhereInput[]
+    id?: StringFilter<"PlaylistPurchase"> | string
+    userId?: StringFilter<"PlaylistPurchase"> | string
+    playlistId?: StringFilter<"PlaylistPurchase"> | string
+    playlistName?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkId?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkStatus?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkRefereceId?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentId?: StringNullableFilter<"PlaylistPurchase"> | string | null
+    razorpaySignature?: StringNullableFilter<"PlaylistPurchase"> | string | null
+    purchasedAt?: DateTimeFilter<"PlaylistPurchase"> | Date | string
+    amount?: FloatFilter<"PlaylistPurchase"> | number
+    user?: XOR<UserScalarRelationFilter, userWhereInput>
+    playlist?: XOR<PlaylistScalarRelationFilter, playlistWhereInput>
+  }
+
+  export type PlaylistPurchaseOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    playlistId?: SortOrder
+    playlistName?: SortOrder
+    razorpayPaymentLinkId?: SortOrder
+    razorpayPaymentLinkStatus?: SortOrder
+    razorpayPaymentLinkRefereceId?: SortOrder
+    razorpayPaymentId?: SortOrderInput | SortOrder
+    razorpaySignature?: SortOrderInput | SortOrder
+    purchasedAt?: SortOrder
+    amount?: SortOrder
+    user?: userOrderByWithRelationInput
+    playlist?: playlistOrderByWithRelationInput
+  }
+
+  export type PlaylistPurchaseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    razorpayPaymentLinkRefereceId?: string
+    userId_playlistId?: PlaylistPurchaseUserIdPlaylistIdCompoundUniqueInput
+    AND?: PlaylistPurchaseWhereInput | PlaylistPurchaseWhereInput[]
+    OR?: PlaylistPurchaseWhereInput[]
+    NOT?: PlaylistPurchaseWhereInput | PlaylistPurchaseWhereInput[]
+    userId?: StringFilter<"PlaylistPurchase"> | string
+    playlistId?: StringFilter<"PlaylistPurchase"> | string
+    playlistName?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkId?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkStatus?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentId?: StringNullableFilter<"PlaylistPurchase"> | string | null
+    razorpaySignature?: StringNullableFilter<"PlaylistPurchase"> | string | null
+    purchasedAt?: DateTimeFilter<"PlaylistPurchase"> | Date | string
+    amount?: FloatFilter<"PlaylistPurchase"> | number
+    user?: XOR<UserScalarRelationFilter, userWhereInput>
+    playlist?: XOR<PlaylistScalarRelationFilter, playlistWhereInput>
+  }, "id" | "razorpayPaymentLinkRefereceId" | "userId_playlistId">
+
+  export type PlaylistPurchaseOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    playlistId?: SortOrder
+    playlistName?: SortOrder
+    razorpayPaymentLinkId?: SortOrder
+    razorpayPaymentLinkStatus?: SortOrder
+    razorpayPaymentLinkRefereceId?: SortOrder
+    razorpayPaymentId?: SortOrderInput | SortOrder
+    razorpaySignature?: SortOrderInput | SortOrder
+    purchasedAt?: SortOrder
+    amount?: SortOrder
+    _count?: PlaylistPurchaseCountOrderByAggregateInput
+    _avg?: PlaylistPurchaseAvgOrderByAggregateInput
+    _max?: PlaylistPurchaseMaxOrderByAggregateInput
+    _min?: PlaylistPurchaseMinOrderByAggregateInput
+    _sum?: PlaylistPurchaseSumOrderByAggregateInput
+  }
+
+  export type PlaylistPurchaseScalarWhereWithAggregatesInput = {
+    AND?: PlaylistPurchaseScalarWhereWithAggregatesInput | PlaylistPurchaseScalarWhereWithAggregatesInput[]
+    OR?: PlaylistPurchaseScalarWhereWithAggregatesInput[]
+    NOT?: PlaylistPurchaseScalarWhereWithAggregatesInput | PlaylistPurchaseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    userId?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    playlistId?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    playlistName?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkId?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkStatus?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkRefereceId?: StringWithAggregatesFilter<"PlaylistPurchase"> | string
+    razorpayPaymentId?: StringNullableWithAggregatesFilter<"PlaylistPurchase"> | string | null
+    razorpaySignature?: StringNullableWithAggregatesFilter<"PlaylistPurchase"> | string | null
+    purchasedAt?: DateTimeWithAggregatesFilter<"PlaylistPurchase"> | Date | string
+    amount?: FloatWithAggregatesFilter<"PlaylistPurchase"> | number
+  }
+
   export type userCreateInput = {
     id?: string
     name?: string | null
@@ -10639,11 +12204,13 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemCreateNestedManyWithoutUserInput
     problemSolved?: problemSolvedCreateNestedManyWithoutUserInput
     playlist?: playlistCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutUserInput
   }
 
   export type userUncheckedCreateInput = {
@@ -10657,11 +12224,13 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: problemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlist?: playlistUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type userUpdateInput = {
@@ -10675,11 +12244,13 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemUpdateManyWithoutUserNestedInput
     problemSolved?: problemSolvedUpdateManyWithoutUserNestedInput
     playlist?: playlistUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutUserNestedInput
   }
 
   export type userUncheckedUpdateInput = {
@@ -10693,11 +12264,13 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: problemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlist?: playlistUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type userCreateManyInput = {
@@ -10711,6 +12284,7 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10726,6 +12300,7 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10741,6 +12316,7 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11173,46 +12749,65 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemInPlaylistCreateNestedManyWithoutPlaylistInput
     user: userCreateNestedOneWithoutPlaylistInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutPlaylistInput
   }
 
   export type playlistUncheckedCreateInput = {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemInPlaylistUncheckedCreateNestedManyWithoutPlaylistInput
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutPlaylistInput
   }
 
   export type playlistUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemInPlaylistUpdateManyWithoutPlaylistNestedInput
     user?: userUpdateOneRequiredWithoutPlaylistNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutPlaylistNestedInput
   }
 
   export type playlistUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemInPlaylistUncheckedUpdateManyWithoutPlaylistNestedInput
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutPlaylistNestedInput
   }
 
   export type playlistCreateManyInput = {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11222,6 +12817,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11230,6 +12828,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11289,6 +12890,102 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlaylistPurchaseCreateInput = {
+    id?: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+    user: userCreateNestedOneWithoutPurchasesInput
+    playlist: playlistCreateNestedOneWithoutPurchasesInput
+  }
+
+  export type PlaylistPurchaseUncheckedCreateInput = {
+    id?: string
+    userId: string
+    playlistId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+  }
+
+  export type PlaylistPurchaseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    user?: userUpdateOneRequiredWithoutPurchasesNestedInput
+    playlist?: playlistUpdateOneRequiredWithoutPurchasesNestedInput
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    playlistId?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type PlaylistPurchaseCreateManyInput = {
+    id?: string
+    userId: string
+    playlistId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+  }
+
+  export type PlaylistPurchaseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    playlistId?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -11338,6 +13035,14 @@ export namespace Prisma {
     not?: NestedEnumauthSourceFilter<$PrismaModel> | $Enums.authSource
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -11367,6 +13072,12 @@ export namespace Prisma {
     none?: playlistWhereInput
   }
 
+  export type PlaylistPurchaseListRelationFilter = {
+    every?: PlaylistPurchaseWhereInput
+    some?: PlaylistPurchaseWhereInput
+    none?: PlaylistPurchaseWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -11384,6 +13095,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PlaylistPurchaseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type userCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -11395,6 +13110,7 @@ export namespace Prisma {
     authProvider?: SortOrder
     refreshToken?: SortOrder
     verificationCode?: SortOrder
+    purchasedPlaylist?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11512,14 +13228,6 @@ export namespace Prisma {
     in?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel>
     notIn?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel>
     not?: NestedEnumDifficultyFilter<$PrismaModel> | $Enums.Difficulty
-  }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -11893,6 +13601,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type playlistNameUserIdCompoundUniqueInput = {
     name: string
     userId: string
@@ -11902,15 +13621,25 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    coverImage?: SortOrder
+    isPaid?: SortOrder
+    basePrice?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type playlistAvgOrderByAggregateInput = {
+    basePrice?: SortOrder
   }
 
   export type playlistMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    coverImage?: SortOrder
+    isPaid?: SortOrder
+    basePrice?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11920,9 +13649,32 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    coverImage?: SortOrder
+    isPaid?: SortOrder
+    basePrice?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type playlistSumOrderByAggregateInput = {
+    basePrice?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type PlaylistScalarRelationFilter = {
@@ -11959,6 +13711,92 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type PlaylistPurchaseUserIdPlaylistIdCompoundUniqueInput = {
+    userId: string
+    playlistId: string
+  }
+
+  export type PlaylistPurchaseCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    playlistId?: SortOrder
+    playlistName?: SortOrder
+    razorpayPaymentLinkId?: SortOrder
+    razorpayPaymentLinkStatus?: SortOrder
+    razorpayPaymentLinkRefereceId?: SortOrder
+    razorpayPaymentId?: SortOrder
+    razorpaySignature?: SortOrder
+    purchasedAt?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PlaylistPurchaseAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type PlaylistPurchaseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    playlistId?: SortOrder
+    playlistName?: SortOrder
+    razorpayPaymentLinkId?: SortOrder
+    razorpayPaymentLinkStatus?: SortOrder
+    razorpayPaymentLinkRefereceId?: SortOrder
+    razorpayPaymentId?: SortOrder
+    razorpaySignature?: SortOrder
+    purchasedAt?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PlaylistPurchaseMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    playlistId?: SortOrder
+    playlistName?: SortOrder
+    razorpayPaymentLinkId?: SortOrder
+    razorpayPaymentLinkStatus?: SortOrder
+    razorpayPaymentLinkRefereceId?: SortOrder
+    razorpayPaymentId?: SortOrder
+    razorpaySignature?: SortOrder
+    purchasedAt?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PlaylistPurchaseSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type userCreatepurchasedPlaylistInput = {
+    set: string[]
+  }
+
   export type problemCreateNestedManyWithoutUserInput = {
     create?: XOR<problemCreateWithoutUserInput, problemUncheckedCreateWithoutUserInput> | problemCreateWithoutUserInput[] | problemUncheckedCreateWithoutUserInput[]
     connectOrCreate?: problemCreateOrConnectWithoutUserInput | problemCreateOrConnectWithoutUserInput[]
@@ -11978,6 +13816,13 @@ export namespace Prisma {
     connectOrCreate?: playlistCreateOrConnectWithoutUserInput | playlistCreateOrConnectWithoutUserInput[]
     createMany?: playlistCreateManyUserInputEnvelope
     connect?: playlistWhereUniqueInput | playlistWhereUniqueInput[]
+  }
+
+  export type PlaylistPurchaseCreateNestedManyWithoutUserInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutUserInput, PlaylistPurchaseUncheckedCreateWithoutUserInput> | PlaylistPurchaseCreateWithoutUserInput[] | PlaylistPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutUserInput | PlaylistPurchaseCreateOrConnectWithoutUserInput[]
+    createMany?: PlaylistPurchaseCreateManyUserInputEnvelope
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
   }
 
   export type problemUncheckedCreateNestedManyWithoutUserInput = {
@@ -12001,6 +13846,13 @@ export namespace Prisma {
     connect?: playlistWhereUniqueInput | playlistWhereUniqueInput[]
   }
 
+  export type PlaylistPurchaseUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutUserInput, PlaylistPurchaseUncheckedCreateWithoutUserInput> | PlaylistPurchaseCreateWithoutUserInput[] | PlaylistPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutUserInput | PlaylistPurchaseCreateOrConnectWithoutUserInput[]
+    createMany?: PlaylistPurchaseCreateManyUserInputEnvelope
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -12019,6 +13871,11 @@ export namespace Prisma {
 
   export type EnumauthSourceFieldUpdateOperationsInput = {
     set?: $Enums.authSource
+  }
+
+  export type userUpdatepurchasedPlaylistInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -12067,6 +13924,20 @@ export namespace Prisma {
     deleteMany?: playlistScalarWhereInput | playlistScalarWhereInput[]
   }
 
+  export type PlaylistPurchaseUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutUserInput, PlaylistPurchaseUncheckedCreateWithoutUserInput> | PlaylistPurchaseCreateWithoutUserInput[] | PlaylistPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutUserInput | PlaylistPurchaseCreateOrConnectWithoutUserInput[]
+    upsert?: PlaylistPurchaseUpsertWithWhereUniqueWithoutUserInput | PlaylistPurchaseUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PlaylistPurchaseCreateManyUserInputEnvelope
+    set?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    disconnect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    delete?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    update?: PlaylistPurchaseUpdateWithWhereUniqueWithoutUserInput | PlaylistPurchaseUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PlaylistPurchaseUpdateManyWithWhereWithoutUserInput | PlaylistPurchaseUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PlaylistPurchaseScalarWhereInput | PlaylistPurchaseScalarWhereInput[]
+  }
+
   export type problemUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<problemCreateWithoutUserInput, problemUncheckedCreateWithoutUserInput> | problemCreateWithoutUserInput[] | problemUncheckedCreateWithoutUserInput[]
     connectOrCreate?: problemCreateOrConnectWithoutUserInput | problemCreateOrConnectWithoutUserInput[]
@@ -12107,6 +13978,20 @@ export namespace Prisma {
     update?: playlistUpdateWithWhereUniqueWithoutUserInput | playlistUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: playlistUpdateManyWithWhereWithoutUserInput | playlistUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: playlistScalarWhereInput | playlistScalarWhereInput[]
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutUserInput, PlaylistPurchaseUncheckedCreateWithoutUserInput> | PlaylistPurchaseCreateWithoutUserInput[] | PlaylistPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutUserInput | PlaylistPurchaseCreateOrConnectWithoutUserInput[]
+    upsert?: PlaylistPurchaseUpsertWithWhereUniqueWithoutUserInput | PlaylistPurchaseUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PlaylistPurchaseCreateManyUserInputEnvelope
+    set?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    disconnect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    delete?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    update?: PlaylistPurchaseUpdateWithWhereUniqueWithoutUserInput | PlaylistPurchaseUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PlaylistPurchaseUpdateManyWithWhereWithoutUserInput | PlaylistPurchaseUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PlaylistPurchaseScalarWhereInput | PlaylistPurchaseScalarWhereInput[]
   }
 
   export type problemCreatetagsInput = {
@@ -12385,11 +14270,33 @@ export namespace Prisma {
     connect?: userWhereUniqueInput
   }
 
+  export type PlaylistPurchaseCreateNestedManyWithoutPlaylistInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutPlaylistInput, PlaylistPurchaseUncheckedCreateWithoutPlaylistInput> | PlaylistPurchaseCreateWithoutPlaylistInput[] | PlaylistPurchaseUncheckedCreateWithoutPlaylistInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutPlaylistInput | PlaylistPurchaseCreateOrConnectWithoutPlaylistInput[]
+    createMany?: PlaylistPurchaseCreateManyPlaylistInputEnvelope
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+  }
+
   export type problemInPlaylistUncheckedCreateNestedManyWithoutPlaylistInput = {
     create?: XOR<problemInPlaylistCreateWithoutPlaylistInput, problemInPlaylistUncheckedCreateWithoutPlaylistInput> | problemInPlaylistCreateWithoutPlaylistInput[] | problemInPlaylistUncheckedCreateWithoutPlaylistInput[]
     connectOrCreate?: problemInPlaylistCreateOrConnectWithoutPlaylistInput | problemInPlaylistCreateOrConnectWithoutPlaylistInput[]
     createMany?: problemInPlaylistCreateManyPlaylistInputEnvelope
     connect?: problemInPlaylistWhereUniqueInput | problemInPlaylistWhereUniqueInput[]
+  }
+
+  export type PlaylistPurchaseUncheckedCreateNestedManyWithoutPlaylistInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutPlaylistInput, PlaylistPurchaseUncheckedCreateWithoutPlaylistInput> | PlaylistPurchaseCreateWithoutPlaylistInput[] | PlaylistPurchaseUncheckedCreateWithoutPlaylistInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutPlaylistInput | PlaylistPurchaseCreateOrConnectWithoutPlaylistInput[]
+    createMany?: PlaylistPurchaseCreateManyPlaylistInputEnvelope
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type problemInPlaylistUpdateManyWithoutPlaylistNestedInput = {
@@ -12414,6 +14321,20 @@ export namespace Prisma {
     update?: XOR<XOR<userUpdateToOneWithWhereWithoutPlaylistInput, userUpdateWithoutPlaylistInput>, userUncheckedUpdateWithoutPlaylistInput>
   }
 
+  export type PlaylistPurchaseUpdateManyWithoutPlaylistNestedInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutPlaylistInput, PlaylistPurchaseUncheckedCreateWithoutPlaylistInput> | PlaylistPurchaseCreateWithoutPlaylistInput[] | PlaylistPurchaseUncheckedCreateWithoutPlaylistInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutPlaylistInput | PlaylistPurchaseCreateOrConnectWithoutPlaylistInput[]
+    upsert?: PlaylistPurchaseUpsertWithWhereUniqueWithoutPlaylistInput | PlaylistPurchaseUpsertWithWhereUniqueWithoutPlaylistInput[]
+    createMany?: PlaylistPurchaseCreateManyPlaylistInputEnvelope
+    set?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    disconnect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    delete?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    update?: PlaylistPurchaseUpdateWithWhereUniqueWithoutPlaylistInput | PlaylistPurchaseUpdateWithWhereUniqueWithoutPlaylistInput[]
+    updateMany?: PlaylistPurchaseUpdateManyWithWhereWithoutPlaylistInput | PlaylistPurchaseUpdateManyWithWhereWithoutPlaylistInput[]
+    deleteMany?: PlaylistPurchaseScalarWhereInput | PlaylistPurchaseScalarWhereInput[]
+  }
+
   export type problemInPlaylistUncheckedUpdateManyWithoutPlaylistNestedInput = {
     create?: XOR<problemInPlaylistCreateWithoutPlaylistInput, problemInPlaylistUncheckedCreateWithoutPlaylistInput> | problemInPlaylistCreateWithoutPlaylistInput[] | problemInPlaylistUncheckedCreateWithoutPlaylistInput[]
     connectOrCreate?: problemInPlaylistCreateOrConnectWithoutPlaylistInput | problemInPlaylistCreateOrConnectWithoutPlaylistInput[]
@@ -12426,6 +14347,20 @@ export namespace Prisma {
     update?: problemInPlaylistUpdateWithWhereUniqueWithoutPlaylistInput | problemInPlaylistUpdateWithWhereUniqueWithoutPlaylistInput[]
     updateMany?: problemInPlaylistUpdateManyWithWhereWithoutPlaylistInput | problemInPlaylistUpdateManyWithWhereWithoutPlaylistInput[]
     deleteMany?: problemInPlaylistScalarWhereInput | problemInPlaylistScalarWhereInput[]
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateManyWithoutPlaylistNestedInput = {
+    create?: XOR<PlaylistPurchaseCreateWithoutPlaylistInput, PlaylistPurchaseUncheckedCreateWithoutPlaylistInput> | PlaylistPurchaseCreateWithoutPlaylistInput[] | PlaylistPurchaseUncheckedCreateWithoutPlaylistInput[]
+    connectOrCreate?: PlaylistPurchaseCreateOrConnectWithoutPlaylistInput | PlaylistPurchaseCreateOrConnectWithoutPlaylistInput[]
+    upsert?: PlaylistPurchaseUpsertWithWhereUniqueWithoutPlaylistInput | PlaylistPurchaseUpsertWithWhereUniqueWithoutPlaylistInput[]
+    createMany?: PlaylistPurchaseCreateManyPlaylistInputEnvelope
+    set?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    disconnect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    delete?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    connect?: PlaylistPurchaseWhereUniqueInput | PlaylistPurchaseWhereUniqueInput[]
+    update?: PlaylistPurchaseUpdateWithWhereUniqueWithoutPlaylistInput | PlaylistPurchaseUpdateWithWhereUniqueWithoutPlaylistInput[]
+    updateMany?: PlaylistPurchaseUpdateManyWithWhereWithoutPlaylistInput | PlaylistPurchaseUpdateManyWithWhereWithoutPlaylistInput[]
+    deleteMany?: PlaylistPurchaseScalarWhereInput | PlaylistPurchaseScalarWhereInput[]
   }
 
   export type playlistCreateNestedOneWithoutProblemsInput = {
@@ -12454,6 +14389,42 @@ export namespace Prisma {
     upsert?: problemUpsertWithoutProblemsPlaylistsInput
     connect?: problemWhereUniqueInput
     update?: XOR<XOR<problemUpdateToOneWithWhereWithoutProblemsPlaylistsInput, problemUpdateWithoutProblemsPlaylistsInput>, problemUncheckedUpdateWithoutProblemsPlaylistsInput>
+  }
+
+  export type userCreateNestedOneWithoutPurchasesInput = {
+    create?: XOR<userCreateWithoutPurchasesInput, userUncheckedCreateWithoutPurchasesInput>
+    connectOrCreate?: userCreateOrConnectWithoutPurchasesInput
+    connect?: userWhereUniqueInput
+  }
+
+  export type playlistCreateNestedOneWithoutPurchasesInput = {
+    create?: XOR<playlistCreateWithoutPurchasesInput, playlistUncheckedCreateWithoutPurchasesInput>
+    connectOrCreate?: playlistCreateOrConnectWithoutPurchasesInput
+    connect?: playlistWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type userUpdateOneRequiredWithoutPurchasesNestedInput = {
+    create?: XOR<userCreateWithoutPurchasesInput, userUncheckedCreateWithoutPurchasesInput>
+    connectOrCreate?: userCreateOrConnectWithoutPurchasesInput
+    upsert?: userUpsertWithoutPurchasesInput
+    connect?: userWhereUniqueInput
+    update?: XOR<XOR<userUpdateToOneWithWhereWithoutPurchasesInput, userUpdateWithoutPurchasesInput>, userUncheckedUpdateWithoutPurchasesInput>
+  }
+
+  export type playlistUpdateOneRequiredWithoutPurchasesNestedInput = {
+    create?: XOR<playlistCreateWithoutPurchasesInput, playlistUncheckedCreateWithoutPurchasesInput>
+    connectOrCreate?: playlistCreateOrConnectWithoutPurchasesInput
+    upsert?: playlistUpsertWithoutPurchasesInput
+    connect?: playlistWhereUniqueInput
+    update?: XOR<XOR<playlistUpdateToOneWithWhereWithoutPurchasesInput, playlistUpdateWithoutPurchasesInput>, playlistUncheckedUpdateWithoutPurchasesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12719,6 +14690,49 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type problemCreateWithoutUserInput = {
     id?: string
     title: string
@@ -12797,18 +14811,26 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemInPlaylistCreateNestedManyWithoutPlaylistInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutPlaylistInput
   }
 
   export type playlistUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemInPlaylistUncheckedCreateNestedManyWithoutPlaylistInput
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutPlaylistInput
   }
 
   export type playlistCreateOrConnectWithoutUserInput = {
@@ -12818,6 +14840,42 @@ export namespace Prisma {
 
   export type playlistCreateManyUserInputEnvelope = {
     data: playlistCreateManyUserInput | playlistCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PlaylistPurchaseCreateWithoutUserInput = {
+    id?: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+    playlist: playlistCreateNestedOneWithoutPurchasesInput
+  }
+
+  export type PlaylistPurchaseUncheckedCreateWithoutUserInput = {
+    id?: string
+    playlistId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+  }
+
+  export type PlaylistPurchaseCreateOrConnectWithoutUserInput = {
+    where: PlaylistPurchaseWhereUniqueInput
+    create: XOR<PlaylistPurchaseCreateWithoutUserInput, PlaylistPurchaseUncheckedCreateWithoutUserInput>
+  }
+
+  export type PlaylistPurchaseCreateManyUserInputEnvelope = {
+    data: PlaylistPurchaseCreateManyUserInput | PlaylistPurchaseCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -12908,9 +14966,45 @@ export namespace Prisma {
     id?: StringFilter<"playlist"> | string
     name?: StringFilter<"playlist"> | string
     description?: StringNullableFilter<"playlist"> | string | null
+    coverImage?: StringNullableFilter<"playlist"> | string | null
+    isPaid?: BoolFilter<"playlist"> | boolean
+    basePrice?: FloatNullableFilter<"playlist"> | number | null
     userId?: StringFilter<"playlist"> | string
     createdAt?: DateTimeFilter<"playlist"> | Date | string
     updatedAt?: DateTimeFilter<"playlist"> | Date | string
+  }
+
+  export type PlaylistPurchaseUpsertWithWhereUniqueWithoutUserInput = {
+    where: PlaylistPurchaseWhereUniqueInput
+    update: XOR<PlaylistPurchaseUpdateWithoutUserInput, PlaylistPurchaseUncheckedUpdateWithoutUserInput>
+    create: XOR<PlaylistPurchaseCreateWithoutUserInput, PlaylistPurchaseUncheckedCreateWithoutUserInput>
+  }
+
+  export type PlaylistPurchaseUpdateWithWhereUniqueWithoutUserInput = {
+    where: PlaylistPurchaseWhereUniqueInput
+    data: XOR<PlaylistPurchaseUpdateWithoutUserInput, PlaylistPurchaseUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PlaylistPurchaseUpdateManyWithWhereWithoutUserInput = {
+    where: PlaylistPurchaseScalarWhereInput
+    data: XOR<PlaylistPurchaseUpdateManyMutationInput, PlaylistPurchaseUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PlaylistPurchaseScalarWhereInput = {
+    AND?: PlaylistPurchaseScalarWhereInput | PlaylistPurchaseScalarWhereInput[]
+    OR?: PlaylistPurchaseScalarWhereInput[]
+    NOT?: PlaylistPurchaseScalarWhereInput | PlaylistPurchaseScalarWhereInput[]
+    id?: StringFilter<"PlaylistPurchase"> | string
+    userId?: StringFilter<"PlaylistPurchase"> | string
+    playlistId?: StringFilter<"PlaylistPurchase"> | string
+    playlistName?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkId?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkStatus?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentLinkRefereceId?: StringFilter<"PlaylistPurchase"> | string
+    razorpayPaymentId?: StringNullableFilter<"PlaylistPurchase"> | string | null
+    razorpaySignature?: StringNullableFilter<"PlaylistPurchase"> | string | null
+    purchasedAt?: DateTimeFilter<"PlaylistPurchase"> | Date | string
+    amount?: FloatFilter<"PlaylistPurchase"> | number
   }
 
   export type userCreateWithoutProblemsInput = {
@@ -12924,10 +15018,12 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problemSolved?: problemSolvedCreateNestedManyWithoutUserInput
     playlist?: playlistCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutUserInput
   }
 
   export type userUncheckedCreateWithoutProblemsInput = {
@@ -12941,10 +15037,12 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problemSolved?: problemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlist?: playlistUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type userCreateOrConnectWithoutProblemsInput = {
@@ -13066,10 +15164,12 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problemSolved?: problemSolvedUpdateManyWithoutUserNestedInput
     playlist?: playlistUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutUserNestedInput
   }
 
   export type userUncheckedUpdateWithoutProblemsInput = {
@@ -13083,10 +15183,12 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problemSolved?: problemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlist?: playlistUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type submissionUpsertWithWhereUniqueWithoutProblemInput = {
@@ -13434,10 +15536,12 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemCreateNestedManyWithoutUserInput
     playlist?: playlistCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutUserInput
   }
 
   export type userUncheckedCreateWithoutProblemSolvedInput = {
@@ -13451,10 +15555,12 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemUncheckedCreateNestedManyWithoutUserInput
     playlist?: playlistUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type userCreateOrConnectWithoutProblemSolvedInput = {
@@ -13529,10 +15635,12 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemUpdateManyWithoutUserNestedInput
     playlist?: playlistUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutUserNestedInput
   }
 
   export type userUncheckedUpdateWithoutProblemSolvedInput = {
@@ -13546,10 +15654,12 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemUncheckedUpdateManyWithoutUserNestedInput
     playlist?: playlistUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type problemUpsertWithoutSolvedByInput = {
@@ -13638,10 +15748,12 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemCreateNestedManyWithoutUserInput
     problemSolved?: problemSolvedCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutUserInput
   }
 
   export type userUncheckedCreateWithoutPlaylistInput = {
@@ -13655,15 +15767,53 @@ export namespace Prisma {
     authProvider?: $Enums.authSource
     refreshToken?: string | null
     verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: problemUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: problemSolvedUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type userCreateOrConnectWithoutPlaylistInput = {
     where: userWhereUniqueInput
     create: XOR<userCreateWithoutPlaylistInput, userUncheckedCreateWithoutPlaylistInput>
+  }
+
+  export type PlaylistPurchaseCreateWithoutPlaylistInput = {
+    id?: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+    user: userCreateNestedOneWithoutPurchasesInput
+  }
+
+  export type PlaylistPurchaseUncheckedCreateWithoutPlaylistInput = {
+    id?: string
+    userId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+  }
+
+  export type PlaylistPurchaseCreateOrConnectWithoutPlaylistInput = {
+    where: PlaylistPurchaseWhereUniqueInput
+    create: XOR<PlaylistPurchaseCreateWithoutPlaylistInput, PlaylistPurchaseUncheckedCreateWithoutPlaylistInput>
+  }
+
+  export type PlaylistPurchaseCreateManyPlaylistInputEnvelope = {
+    data: PlaylistPurchaseCreateManyPlaylistInput | PlaylistPurchaseCreateManyPlaylistInput[]
+    skipDuplicates?: boolean
   }
 
   export type problemInPlaylistUpsertWithWhereUniqueWithoutPlaylistInput = {
@@ -13704,10 +15854,12 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemUpdateManyWithoutUserNestedInput
     problemSolved?: problemSolvedUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutUserNestedInput
   }
 
   export type userUncheckedUpdateWithoutPlaylistInput = {
@@ -13721,28 +15873,54 @@ export namespace Prisma {
     authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: problemSolvedUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PlaylistPurchaseUpsertWithWhereUniqueWithoutPlaylistInput = {
+    where: PlaylistPurchaseWhereUniqueInput
+    update: XOR<PlaylistPurchaseUpdateWithoutPlaylistInput, PlaylistPurchaseUncheckedUpdateWithoutPlaylistInput>
+    create: XOR<PlaylistPurchaseCreateWithoutPlaylistInput, PlaylistPurchaseUncheckedCreateWithoutPlaylistInput>
+  }
+
+  export type PlaylistPurchaseUpdateWithWhereUniqueWithoutPlaylistInput = {
+    where: PlaylistPurchaseWhereUniqueInput
+    data: XOR<PlaylistPurchaseUpdateWithoutPlaylistInput, PlaylistPurchaseUncheckedUpdateWithoutPlaylistInput>
+  }
+
+  export type PlaylistPurchaseUpdateManyWithWhereWithoutPlaylistInput = {
+    where: PlaylistPurchaseScalarWhereInput
+    data: XOR<PlaylistPurchaseUpdateManyMutationInput, PlaylistPurchaseUncheckedUpdateManyWithoutPlaylistInput>
   }
 
   export type playlistCreateWithoutProblemsInput = {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: userCreateNestedOneWithoutPlaylistInput
+    purchases?: PlaylistPurchaseCreateNestedManyWithoutPlaylistInput
   }
 
   export type playlistUncheckedCreateWithoutProblemsInput = {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    purchases?: PlaylistPurchaseUncheckedCreateNestedManyWithoutPlaylistInput
   }
 
   export type playlistCreateOrConnectWithoutProblemsInput = {
@@ -13810,18 +15988,26 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: userUpdateOneRequiredWithoutPlaylistNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutPlaylistNestedInput
   }
 
   export type playlistUncheckedUpdateWithoutProblemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutPlaylistNestedInput
   }
 
   export type problemUpsertWithoutProblemsPlaylistsInput = {
@@ -13875,6 +16061,166 @@ export namespace Prisma {
     solvedBy?: problemSolvedUncheckedUpdateManyWithoutProblemNestedInput
   }
 
+  export type userCreateWithoutPurchasesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    avatar?: string | null
+    role?: $Enums.userRole
+    password?: string | null
+    isVerified?: boolean
+    authProvider?: $Enums.authSource
+    refreshToken?: string | null
+    verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    problems?: problemCreateNestedManyWithoutUserInput
+    problemSolved?: problemSolvedCreateNestedManyWithoutUserInput
+    playlist?: playlistCreateNestedManyWithoutUserInput
+  }
+
+  export type userUncheckedCreateWithoutPurchasesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    avatar?: string | null
+    role?: $Enums.userRole
+    password?: string | null
+    isVerified?: boolean
+    authProvider?: $Enums.authSource
+    refreshToken?: string | null
+    verificationCode?: string | null
+    purchasedPlaylist?: userCreatepurchasedPlaylistInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    problems?: problemUncheckedCreateNestedManyWithoutUserInput
+    problemSolved?: problemSolvedUncheckedCreateNestedManyWithoutUserInput
+    playlist?: playlistUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type userCreateOrConnectWithoutPurchasesInput = {
+    where: userWhereUniqueInput
+    create: XOR<userCreateWithoutPurchasesInput, userUncheckedCreateWithoutPurchasesInput>
+  }
+
+  export type playlistCreateWithoutPurchasesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    problems?: problemInPlaylistCreateNestedManyWithoutPlaylistInput
+    user: userCreateNestedOneWithoutPlaylistInput
+  }
+
+  export type playlistUncheckedCreateWithoutPurchasesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    problems?: problemInPlaylistUncheckedCreateNestedManyWithoutPlaylistInput
+  }
+
+  export type playlistCreateOrConnectWithoutPurchasesInput = {
+    where: playlistWhereUniqueInput
+    create: XOR<playlistCreateWithoutPurchasesInput, playlistUncheckedCreateWithoutPurchasesInput>
+  }
+
+  export type userUpsertWithoutPurchasesInput = {
+    update: XOR<userUpdateWithoutPurchasesInput, userUncheckedUpdateWithoutPurchasesInput>
+    create: XOR<userCreateWithoutPurchasesInput, userUncheckedCreateWithoutPurchasesInput>
+    where?: userWhereInput
+  }
+
+  export type userUpdateToOneWithWhereWithoutPurchasesInput = {
+    where?: userWhereInput
+    data: XOR<userUpdateWithoutPurchasesInput, userUncheckedUpdateWithoutPurchasesInput>
+  }
+
+  export type userUpdateWithoutPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumuserRoleFieldUpdateOperationsInput | $Enums.userRole
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    problems?: problemUpdateManyWithoutUserNestedInput
+    problemSolved?: problemSolvedUpdateManyWithoutUserNestedInput
+    playlist?: playlistUpdateManyWithoutUserNestedInput
+  }
+
+  export type userUncheckedUpdateWithoutPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumuserRoleFieldUpdateOperationsInput | $Enums.userRole
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    authProvider?: EnumauthSourceFieldUpdateOperationsInput | $Enums.authSource
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationCode?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedPlaylist?: userUpdatepurchasedPlaylistInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    problems?: problemUncheckedUpdateManyWithoutUserNestedInput
+    problemSolved?: problemSolvedUncheckedUpdateManyWithoutUserNestedInput
+    playlist?: playlistUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type playlistUpsertWithoutPurchasesInput = {
+    update: XOR<playlistUpdateWithoutPurchasesInput, playlistUncheckedUpdateWithoutPurchasesInput>
+    create: XOR<playlistCreateWithoutPurchasesInput, playlistUncheckedCreateWithoutPurchasesInput>
+    where?: playlistWhereInput
+  }
+
+  export type playlistUpdateToOneWithWhereWithoutPurchasesInput = {
+    where?: playlistWhereInput
+    data: XOR<playlistUpdateWithoutPurchasesInput, playlistUncheckedUpdateWithoutPurchasesInput>
+  }
+
+  export type playlistUpdateWithoutPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    problems?: problemInPlaylistUpdateManyWithoutPlaylistNestedInput
+    user?: userUpdateOneRequiredWithoutPlaylistNestedInput
+  }
+
+  export type playlistUncheckedUpdateWithoutPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    problems?: problemInPlaylistUncheckedUpdateManyWithoutPlaylistNestedInput
+  }
+
   export type problemCreateManyUserInput = {
     id?: string
     title: string
@@ -13903,8 +16249,24 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    coverImage?: string | null
+    isPaid?: boolean
+    basePrice?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type PlaylistPurchaseCreateManyUserInput = {
+    id?: string
+    playlistId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
   }
 
   export type problemUpdateWithoutUserInput = {
@@ -13989,26 +16351,76 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemInPlaylistUpdateManyWithoutPlaylistNestedInput
+    purchases?: PlaylistPurchaseUpdateManyWithoutPlaylistNestedInput
   }
 
   export type playlistUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: problemInPlaylistUncheckedUpdateManyWithoutPlaylistNestedInput
+    purchases?: PlaylistPurchaseUncheckedUpdateManyWithoutPlaylistNestedInput
   }
 
   export type playlistUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlaylistPurchaseUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    playlist?: playlistUpdateOneRequiredWithoutPurchasesNestedInput
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    playlistId?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    playlistId?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
   }
 
   export type submissionCreateManyProblemInput = {
@@ -14200,6 +16612,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type PlaylistPurchaseCreateManyPlaylistInput = {
+    id?: string
+    userId: string
+    playlistName: string
+    razorpayPaymentLinkId: string
+    razorpayPaymentLinkStatus: string
+    razorpayPaymentLinkRefereceId: string
+    razorpayPaymentId?: string | null
+    razorpaySignature?: string | null
+    purchasedAt?: Date | string
+    amount: number
+  }
+
   export type problemInPlaylistUpdateWithoutPlaylistInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14219,6 +16644,45 @@ export namespace Prisma {
     problemId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlaylistPurchaseUpdateWithoutPlaylistInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    user?: userUpdateOneRequiredWithoutPurchasesNestedInput
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateWithoutPlaylistInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type PlaylistPurchaseUncheckedUpdateManyWithoutPlaylistInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    playlistName?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkStatus?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentLinkRefereceId?: StringFieldUpdateOperationsInput | string
+    razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    razorpaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    purchasedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    amount?: FloatFieldUpdateOperationsInput | number
   }
 
 

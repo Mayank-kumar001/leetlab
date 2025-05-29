@@ -27,12 +27,15 @@ import problemRouter from './router/problem.router.js';
 import executionRouter from './router/execution.router.js';
 import submissionRouter from './router/submission.router.js';
 import playlistRouter from './router/playlist.router.js';
+import paymentRouter from './router/payment.router.js';
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/problem", problemRouter);
 app.use("/api/v1/execute-code", executionRouter);
 app.use("/api/v1/execute-code", executionRouter);
 app.use("/api/v1/submission", submissionRouter);
 app.use("/api/v1/playlist", playlistRouter);
+app.use("/api/v1/playlist", playlistRouter);
+app.use("/api/v1/payment", paymentRouter);
 
 
 app.listen(port, () => {

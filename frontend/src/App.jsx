@@ -48,6 +48,12 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import OAuthCallbackPage from './pages/OAuthCallbackPage'
 import AddProblemPage from './pages/AddProblemPage'
 import CodeExecutionPage from './pages/CodeExecutionPage'
+import AllProblemPage from './pages/AllProblemPage'
+import CreatePlaylistPage from './pages/CreatePlaylistPage'
+import PlaylistPage from './pages/PlaylistPage'
+import PlaylistProblemPage from './pages/PlaylistProblemPage'
+import PaidPlaylistDescriptionPage from './pages/PaidPlaylistDescriptionPage'
+import RazorPayCallbackPage from './pages/RazorPayCallbackPage'
 
 function App() {
   return (<div className='min-h-screen w-[100vw] m-auto flex justify-center items-center bg-neutral-950'>
@@ -64,6 +70,12 @@ function App() {
       <Route element={<OAuthCallbackPage />} path='/oauth'></Route>
       <Route element={<AddProblemPage />} path='/add-problem'></Route>
       <Route element={<CodeExecutionPage />} path='/code-execute/:problemId'></Route>
+      <Route element={<CreatePlaylistPage />} path='/create-playlist'></Route>
+      <Route element={<AllProblemPage />} path='/allProblem'></Route>
+      <Route element={<PlaylistPage />} path='/playlist'></Route>
+      <Route element={<PlaylistProblemPage />} path='/playlist/:playlistId'></Route>
+      <Route element={<PaidPlaylistDescriptionPage />} path='/playlist/paid/:playlistId'></Route>
+      <Route element={<RazorPayCallbackPage />} path='/razorpay'></Route>
     </Routes>
     </div>
   )

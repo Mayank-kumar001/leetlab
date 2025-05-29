@@ -36,22 +36,24 @@ enum authSource {
 }
 
 model user {
-  id               String          @id @default(uuid())
-  name             String?
-  email            String          @unique
-  avatar           String?
-  role             userRole        @default(USER)
-  password         String?
-  isVerified       Boolean         @default(false)
-  authProvider     authSource      @default(LOCAL)
-  refreshToken     String?
-  verificationCode String?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  id                String             @id @default(uuid())
+  name              String?
+  email             String             @unique
+  avatar            String?
+  role              userRole           @default(USER)
+  password          String?
+  isVerified        Boolean            @default(false)
+  authProvider      authSource         @default(LOCAL)
+  refreshToken      String?
+  verificationCode  String?
+  purchasedPlaylist String[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   // relation
-  problems         problem[]
-  problemSolved    problemSolved[]
-  playlist         playlist[]
+  problems          problem[]
+  problemSolved     problemSolved[]
+  playlist          playlist[]
+  purchases         PlaylistPurchase[]
 }
 
 model problem {
@@ -136,11 +138,15 @@ model playlist {
   id          String              @id @default(uuid())
   name        String
   description String?
+  coverImage  String?             @default("https://res.cloudinary.com/da9yrilnn/image/upload/v1748326159/image_cocz64.png")
+  isPaid      Boolean             @default(false)
+  basePrice   Float?              @default(0)
   userId      String
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
   problems    problemInPlaylist[]
   user        user                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purchases   PlaylistPurchase[]
 
   @@unique([name, userId])
 }
@@ -156,4 +162,23 @@ model problemInPlaylist {
   problem  problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([playListId, problemId])
+}
+
+model PlaylistPurchase {
+  id                            String   @id @default(uuid())
+  userId                        String
+  playlistId                    String
+  playlistName                  String
+  razorpayPaymentLinkId         String
+  razorpayPaymentLinkStatus     String
+  razorpayPaymentLinkRefereceId String
+  razorpayPaymentId             String?
+  razorpaySignature             String?
+  purchasedAt                   DateTime @default(now())
+  amount                        Float
+
+  user     user     @relation(fields: [userId], references: [id])
+  playlist playlist @relation(fields: [playlistId], references: [id])
+
+  @@unique([userId, playlistId]) // one user can't purchase same playlist twice
 }

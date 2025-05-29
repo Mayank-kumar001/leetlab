@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast"
+import axios from "axios";
 
 const problemStore = create((set) => ({
     problemData: null,
+    allProblems: [],
     loadingProblem: false,
 
     getProblemByID: async (id) => {
@@ -20,6 +22,19 @@ const problemStore = create((set) => ({
         } finally {
             set({ loadingProblem: true });
         }
+    },
+    getAllProblem: async () => {
+        set({loadingProblem: true})
+        try {
+            const res = await axiosInstance("/problem/get-all-problems/")
+            set({allProblems: res.data.data})
+            
+        } catch (error) {
+            console.log("error from problem store", error)
+        } finally {
+            set({loadingProblem: false})
+        }
+
     }
 }))
 
