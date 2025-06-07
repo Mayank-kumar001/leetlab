@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import axios from "axios"
 import { axiosInstance } from '../lib/axios'
 import toast from "react-hot-toast"
-import { useNavigate } from 'react-router-dom'
+import { data, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 
 
@@ -32,7 +32,7 @@ function OAuthCallbackPage() {
             }
 
             try {
-                // const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/auth/login-googleOAuth` 
+                
                 const res = await axiosInstance.post(
                     `auth/${state.status}-googleOAuth`,
                     { code },
@@ -41,6 +41,9 @@ function OAuthCallbackPage() {
                 console.log("Token exchange successful:", res.data);
                 toast.success("Signup successfull");
                 navigate("/home");
+                const stringifiedData = JSON.stringify(res.data.data)
+                const userData = {state:{userData:res.data.data}}
+                localStorage.setItem("auth-storage", JSON.stringify(userData));
 
             } catch (error) {
                 console.error("Failed to exchange code for token:", error);

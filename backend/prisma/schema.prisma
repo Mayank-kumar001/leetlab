@@ -35,6 +35,12 @@ enum authSource {
   LOCAL
 }
 
+enum taskStatus {
+  PENDING
+  COMPLETED
+  INCOMPLETE
+}
+
 model user {
   id                String             @id @default(uuid())
   name              String?
@@ -54,6 +60,8 @@ model user {
   problemSolved     problemSolved[]
   playlist          playlist[]
   purchases         PlaylistPurchase[]
+  tasks             Task[]
+  notifications     Notification[]
 }
 
 model problem {
@@ -171,7 +179,7 @@ model PlaylistPurchase {
   playlistName                  String
   razorpayPaymentLinkId         String
   razorpayPaymentLinkStatus     String
-  razorpayPaymentLinkRefereceId String @unique
+  razorpayPaymentLinkRefereceId String   @unique
   razorpayPaymentId             String?
   razorpaySignature             String?
   purchasedAt                   DateTime @default(now())
@@ -181,4 +189,31 @@ model PlaylistPurchase {
   playlist playlist @relation(fields: [playlistId], references: [id])
 
   @@unique([userId, playlistId]) // one user can't purchase same playlist twice
+}
+
+model Task {
+  id        String     @id @default(uuid())
+  userId    String
+  deadline  DateTime
+  status    taskStatus @default(PENDING)
+  task      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  user          user           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  taskId    String
+  userId    String
+  sent      Boolean  @default(false)
+  notifyAt  String
+  createdAt DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  
 }

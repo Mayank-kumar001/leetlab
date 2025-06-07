@@ -5,6 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { axiosInstance } from '../lib/axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+import { useMotionValueEvent, useScroll } from 'motion/react'
+import { useState } from 'react'
 
 
 const playlistSchema = z.object({
@@ -30,10 +33,23 @@ function CreatePlaylistPage() {
         console.log(error);
     }
 }
+const { scrollY } = useScroll();
+  const [scroll, setScroll] = useState(false)
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+        console.log("Page scroll: ", latest);
+        if (latest > 10) {
+            setScroll(true);
+        } else {
+            setScroll(false);
+        }
+    });
 
   return (
-    <div className='text-white'>
-        <form onSubmit={handleSubmit(onSubmit)} className='bg-[#373535] flex flex-col gap-4 px-2 py-3 w-96 rounded-md'>
+    <div className='text-white w-full min-h-screen flex flex-col item-center'>
+        <Navbar isScroll={scroll}></Navbar>
+
+        <form onSubmit={handleSubmit(onSubmit)} className='mt-48 bg-[#373535] flex flex-col gap-4 px-2 py-3 w-96 rounded-md self-center'>
 
             <input className='bg-[#3d3d3d] px-4 py-1 text-sm rounded-md' type="text" placeholder='Name of playlist ' {...register("name")}/>
 

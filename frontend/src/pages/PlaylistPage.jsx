@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import { useMotionValueEvent, useScroll } from "motion/react";
 
 function PlaylistPage() {
     const navigate = useNavigate()
@@ -10,11 +12,24 @@ function PlaylistPage() {
         axiosInstance.get("/playlist/").then((res) => setPlaylist(res.data.data));
         axiosInstance.get("/playlist/paid").then((res) => setPaidPlaylist(res.data.data))
     }, []);
+
+    const { scrollY } = useScroll();
+  const [scroll, setScroll] = useState(false)
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+        console.log("Page scroll: ", latest);
+        if (latest > 10) {
+            setScroll(true);
+        } else {
+            setScroll(false);
+        }
+    });
     return (
-        <div className="min-h-screen w-full text-white">
-            <div>hello</div>
+        <div className="min-h-screen w-full text-white flex flex-col items-center">
+            <Navbar isScroll={scroll}></Navbar>
+
             <div>
-                <div className="text-2xl font-bold">Paid Playlist</div>
+                <div className="text-2xl font-bold text-center mb-4 mt-2">Paid Playlist</div>
 
                 <div className="flex gap-3 justify-center items-center">
                     {paidPlaylist.map((elem) => (
@@ -37,7 +52,7 @@ function PlaylistPage() {
             </div>
 
             <div>
-                <div className="text-2xl font-bold">Your Playlist</div>
+                <div className="text-2xl font-bold text-center mt-16 mb-4">Your Playlist</div>
 
                 <div className="flex gap-3 justify-center items-center">
                     {playlist.map((elem) => (
@@ -51,7 +66,7 @@ function PlaylistPage() {
                                 />
                             </div>
                             <div className="text-white font-bold text-xl">{elem.name}</div>
-                            <div className="text-sm text-neutral-400">{elem.description}</div>
+                            <div className="text-sm text-neutral-400">{elem.description.slice(0, 10)}...</div>
                         </div>
                     ))}
                 </div>

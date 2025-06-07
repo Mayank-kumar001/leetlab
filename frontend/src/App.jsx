@@ -36,6 +36,7 @@
 
 
 import React from 'react'
+import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import HomePage from './pages/HomePage'
@@ -54,11 +55,19 @@ import PlaylistPage from './pages/PlaylistPage'
 import PlaylistProblemPage from './pages/PlaylistProblemPage'
 import PaidPlaylistDescriptionPage from './pages/PaidPlaylistDescriptionPage'
 import RazorPayCallbackPage from './pages/RazorPayCallbackPage'
+import CallStackPage from './pages/CallStackPage'
+import Navbar from './components/Navbar'
+import { useMotionValueEvent, useScroll } from 'motion/react'
 
 function App() {
-  return (<div className='min-h-screen w-[100vw] m-auto flex justify-center items-center bg-neutral-950'>
+  
+  return (
+
+  <div className='min-h-screen w-[100vw] m-auto flex flex-col justify-center items-center bg-neutral-950'>
     
       <div><Toaster/></div>
+      
+
       <Routes>
       <Route element={<LandingPage />} path='/'></Route>
       <Route element={<HomePage />} path='/home'></Route>
@@ -76,6 +85,7 @@ function App() {
       <Route element={<PlaylistProblemPage />} path='/playlist/:playlistId'></Route>
       <Route element={<PaidPlaylistDescriptionPage />} path='/playlist/paid/:playlistId'></Route>
       <Route element={<RazorPayCallbackPage />} path='/razorpay'></Route>
+      <Route element={<CallStackPage />} path='/callStack'></Route>
     </Routes>
     </div>
   )

@@ -229,6 +229,25 @@ exports.Prisma.PlaylistPurchaseScalarFieldEnum = {
   amount: 'amount'
 };
 
+exports.Prisma.TaskScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  deadline: 'deadline',
+  status: 'status',
+  task: 'task',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  userId: 'userId',
+  sent: 'sent',
+  notifyAt: 'notifyAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -279,6 +298,12 @@ exports.submissionStatus = exports.$Enums.submissionStatus = {
   WRONG_ANSWER: 'WRONG_ANSWER'
 };
 
+exports.taskStatus = exports.$Enums.taskStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  INCOMPLETE: 'INCOMPLETE'
+};
+
 exports.Prisma.ModelName = {
   user: 'user',
   problem: 'problem',
@@ -287,7 +312,9 @@ exports.Prisma.ModelName = {
   problemSolved: 'problemSolved',
   playlist: 'playlist',
   problemInPlaylist: 'problemInPlaylist',
-  PlaylistPurchase: 'PlaylistPurchase'
+  PlaylistPurchase: 'PlaylistPurchase',
+  Task: 'Task',
+  Notification: 'Notification'
 };
 
 /**

@@ -84,15 +84,16 @@ function AllProblemPage() {
                             return elem.tags[0] === topic;
                         })
                         .map((elem) => (
-                            <div
+                            <div onClick={() => navigate(`/code-execute/${elem.id}`)}
                                 key={elem.id}
-                                className=" py-2 px-4 bg-[#242424] w-full rounded-lg flex justify-between">
+                                className=" py-2 px-4 hover:bg-[#242424] w-full rounded-lg flex justify-between cursor-pointer bg-[#191919]">
                                 <span className="">{elem.title}</span>
                                 <span className="flex gap-2  justify-start">
                                     <TagComponent>{elem.difficulty}</TagComponent>
                                     <TagComponent>{elem.tags[0]}</TagComponent>
                                     <button
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                            e.stopPropagation();
                                             setOpenPlaylistModal(!openPlaylistModal);
                                             setSelectedProblemId(elem.id);
                                         }}

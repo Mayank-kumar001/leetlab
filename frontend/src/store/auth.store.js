@@ -100,6 +100,7 @@ const authStore = create(persist((set) => ({
             const res = await axiosInstance.post("/auth/logout");
             console.log(res.data);
             set({ userData: null });
+            // location.reload();
             toast.success("logout successfull");
 
         } catch (error) {
